@@ -1,32 +1,23 @@
 <?php
-// session_start();
+session_start();
 include 'dbconn.php';
-
-// if (!isset($_SESSION['username'])) {
-//    header('location: home.php');
-//    exit(); // Ensure that the script stops here if the user is not logged in.
-// }
-
-// $g_id;
-// $i = 0;
-// $searchValue;
-// $count = isset($_GET['count']) ? (int) $_GET['count'] : 0; // Ensure that $count is an integer.
-// $username = $_SESSION['username'];
-
-// $stmt = $conn->prepare("SELECT id FROM register WHERE uname = :username");
-// $stmt->bindParam(':username', $username);
-// $stmt->execute();
-// $uid = $stmt->fetch(PDO::FETCH_COLUMN);
-
-function calculateAverageRating($conn, $gadgetID)
-{
-   $query = "SELECT AVG(rating) AS average_rating FROM feedback WHERE g_id = :gadgetID";
-   $stmt = $conn->prepare($query);
-   $stmt->bindParam(':gadgetID', $gadgetID);
-   $stmt->execute();
-   $result = $stmt->fetch(PDO::FETCH_ASSOC);
-   return isset($result['average_rating']) ? $result['average_rating'] : 0;
+require_once 'rating.php';
+if (!isset($_SESSION['uname'])) {
+   header('location: home.php');
+   exit(); // Ensure that the script stops here if the user is not logged in.
 }
+
+$g_id;
+$i = 0;
+$searchValue;
+$count = isset($_GET['count']) ? (int) $_GET['count'] : 0; // Ensure that $count is an integer.
+$uname = $_SESSION['uname'];
+
+$stmt = $conn->prepare("SELECT id FROM registration WHERE uname = :uname");
+$stmt->bindParam(':uname', $uname);
+$stmt->execute();
+$uid = $stmt->fetch(PDO::FETCH_COLUMN);
+
 
 $value = array(); // Initialize the $value array.
 
@@ -132,11 +123,11 @@ do {
             <div id="popup-container"
                class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-5 shadow-2xl z-10">
                <div id="username" class="container">
-                  <?php echo $_SESSION['username'] ?>
+                  <?php echo $_SESSION['uname'] ?>
                </div>
                <div class="user-fun">
                   <div class="update-user">
-                     <a href="update.php?id=<?php echo $uid; ?>">update</a>
+                     <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
                   </div>
                   <div class="logout">
                      <a href="logout.php">logout</a>
@@ -203,37 +194,23 @@ do {
 
                   if ($stmt->rowCount() > 0) {
                      while ($row = $stmt->fetch()) {
+                        $gadgetID = $row['g_id'];
                         ?>
                         <div
                            class="w-1/5 h-2/6 bg-slate-100 rounded-xl hover:bg-white hover:text-slate-100 shadow hover:shadow-xl">
                            <a href="information.php?g_id=<?php echo $row['g_id']; ?>">
-                              <img class="pro-img" src="../img/<?php echo $row['gimage']; ?>" alt="Gadget Image"
-                                 class="rounded-xl">
-                              <div class="gadget-section">
+                              <img src="../img/<?php echo $row['gimage']; ?>" alt="Gadget Image" class="rounded-xl">
+                              <div class="m-2">
                                  <div>
-                                    <h3 class="text-slate-700 font-semibold mx-4">
+                                    <h3 class="text-slate-700 font-semibold">
                                        <?php echo $row['gname']; ?>
                                     </h3>
-                                    <p class="mx-4 text-purple-500"><span>&#36;
+                                    <p class="text-purple-500"><span>&#36;
                                           <?php echo $row['gprice']; ?>
                                        </span></p>
                                  </div>
                                  <div class="gadget-rating">
-                                    <?php
-                                    $averageRating = calculateAverageRating($conn, $row['g_id']);
-                                    $rating = round($averageRating * 2) / 2;
-
-                                    for ($i = 1; $i <= 5; $i++) {
-                                       if ($i <= $rating) {
-                                          echo '<i class="fas fa-star" style="color: gold;"></i>';
-                                       } elseif ($i - 0.5 == $rating) {
-                                          echo '<i class="fas fa-star-half-alt" style="color: gold;"></i>';
-                                       } else {
-                                          echo '<i class="far fa-star" style="color: gold;"></i>';
-                                       }
-                                    }
-                                    echo ' ' . number_format($averageRating, 1);
-                                    ?>
+                                    <?php echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>'; ?>
                                  </div>
                               </div>
                            </a>
@@ -257,34 +234,31 @@ do {
          <div class="main_product">
             <h2 class="text-3xl text-slate-800">Deals</h2>
             <div class="flex items-center justify-evenly gap-6 max-h-full mt-4">
-               <div class="bg-purple-300 w-1/3 rounded-xl">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
-                  </div>
-               </div>
-               <div class="bg-purple-300 w-1/3 rounded-xl">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
-                  </div>
-               </div>
-               <div class="bg-purple-300 w-1/3 rounded-xl">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
+               <div class="bg-slate-300 w-1/3 rounded-xl">
+                  <div class="pro-container">
+                     <?php
+                     $sql = "SELECT * FROM product WHERE category = 'deals' limit 6";
+                     $stmt = $conn->query($sql);
+
+                     if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch()) {
+                           $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
+                           echo '<a href="#" class="slider-card">';
+                           echo '<div class="w-full h-44 p-3">';
+                           echo '<img class="h-full w-full rounded-xl" src="../img/' . $row['gimage'] . '" alt="Gadget Image">';
+                           echo '</div>';
+                           echo '<div class="text-slate-500 text-left p-1 m-2">';
+                           echo '<p class="pro-name">' . $row['gname'] . '</p>';
+                           echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
+                           echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
+                           echo '</div>';
+                           echo '</a>';
+                        }
+
+                     } else {
+                        echo "No deals found.";
+                     }
+                     ?>
                   </div>
                </div>
             </div>

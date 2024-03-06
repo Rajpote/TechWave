@@ -1,3 +1,9 @@
+<?php
+session_start();
+include 'dbconn.php';
+require_once 'rating.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,17 +94,45 @@
             <h2 class="text-4xl text-slate-900">Featured Product</h2>
             <div class="mx-20 my-5">
                <div class="flex items-center justify-center gap-9">
-                  <div
-                     class="w-1/5 h-2/6 bg-slate-100 rounded-xl hover:bg-white hover:text-slate-100 shadow hover:shadow-xl">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" class="rounded-xl" />
-                     <div>
-                        <h3 class="text-slate-700 font-semibold mx-4">iphone 14 pro max</h3>
-                        <p class="mx-4 text-purple-500"><span>&#36;760</span></p>
-                     </div>
-                  </div>
+                  <?php
+                  $sql = "SELECT * FROM product WHERE category = 'deals' LIMIT 6";
+                  $stmt = $conn->query($sql);
+
+                  if ($stmt->rowCount() > 0) {
+                     while ($row = $stmt->fetch()) {
+                        $gadgetID = $row['g_id'];
+                        ?>
+                        <div
+                           class="w-1/5 h-2/6 bg-slate-100 rounded-xl hover:bg-white hover:text-slate-100 shadow hover:shadow-xl">
+                           <a href="information.php?g_id=<?php echo $row['g_id']; ?>">
+                              <img src="../img/<?php echo $row['gimage']; ?>" alt="Gadget Image" class="rounded-xl">
+                              <div class="m-2">
+                                 <div>
+                                    <h3 class="text-slate-700 font-semibold">
+                                       <?php echo $row['gname']; ?>
+                                    </h3>
+                                    <p class="text-purple-500"><span>&#36;
+                                          <?php echo $row['gprice']; ?>
+                                       </span></p>
+                                 </div>
+                                 <div class="gadget-rating">
+                                    <?php echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>'; ?>
+                                 </div>
+                              </div>
+                           </a>
+                        </div>
+                        <?php
+                     }
+                  } else {
+                     echo "No deals found.";
+                  }
+                  ?>
+
                </div>
-               <button class="py-3 px-4 my-5 mx-auto block bg-slate-400 rounded-xl">See All</button>
+
             </div>
+            <button class="py-3 px-4 my-5 mx-auto block bg-slate-400 rounded-xl">See All</button>
+         </div>
          </div>
       </section>
       <hr />
@@ -107,33 +141,30 @@
             <h2 class="text-3xl text-slate-800">Deals</h2>
             <div class="flex items-center justify-evenly gap-6 max-h-full mt-4">
                <div class="bg-slate-300 w-1/3 rounded-xl">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
-                  </div>
-               </div>
-               <div class="bg-slate-300 w-1/3 rounslate">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
-                  </div>
-               </div>
-               <div class="bg-slate-300 w-1/3 rounslate">
-                  <div class="w-full h-44 p-3">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" height="200px"
-                        class="h-full w-full rounded-xl" />
-                  </div>
-                  <div class="text-slate-500 text-left p-1 m-2">
-                     <p>Iphone 13 Pro Amx</p>
-                     <span>&#36;760 </span>
+                  <div class="pro-container">
+                     <?php
+                     $sql = "SELECT * FROM product WHERE category = 'deals' limit 6";
+                     $stmt = $conn->query($sql);
+
+                     if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch()) {
+                           $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
+                           echo '<a href="#" onclick="alertPopup()" class="slider-card">';
+                           echo '<div class="w-full h-44 p-3">';
+                           echo '<img class="h-full w-full rounded-xl" src="../img/' . $row['gimage'] . '" alt="Gadget Image">';
+                           echo '</div>';
+                           echo '<div class="text-slate-500 text-left p-1 m-2">';
+                           echo '<p class="pro-name">' . $row['gname'] . '</p>';
+                           echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
+                           echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
+                           echo '</div>';
+                           echo '</a>';
+                        }
+
+                     } else {
+                        echo "No deals found.";
+                     }
+                     ?>
                   </div>
                </div>
             </div>

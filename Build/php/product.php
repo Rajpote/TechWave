@@ -1,7 +1,11 @@
 <?php
 // session_start();
-include 'dbconn.php';
 
+
+use PSpell\Dictionary;
+
+include 'dbconn.php';
+require_once 'rating.php';
 // if (!isset($_SESSION['username'])) {
 //    header('location: home.php');
 // }
@@ -50,6 +54,40 @@ do {
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <style>
+      .pagination {
+         margin: 20px auto;
+         text-align: center;
+      }
+
+      .pagination .page-link {
+         display: inline-block;
+         padding: 8px 16px;
+         text-decoration: none;
+         color: #010300;
+         border: 1px solid #ddd;
+         border-radius: 25px;
+         margin-right: 4px;
+      }
+
+      .pagination .page-link.active {
+         background-color: #333;
+         color: #fff;
+      }
+
+      .pagination .page-link:hover {
+         background-color: #333;
+         color: #fff;
+      }
+
+      .pagination .page-link:first-child {
+         margin-left: 0;
+      }
+
+      .pagination .page-link:last-child {
+         margin-right: 0;
+      }
+   </style>
 </head>
 
 <body>
@@ -104,57 +142,35 @@ do {
 
                   if ($stmt->rowCount() > 0) {
                      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
                         $gadget_id = $row['g_id'];
                         $average_rating = $row['average_rating'];
 
                         echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item">';
-
+                        echo '<div class="w-2/5 bg-slate-100 p-3 hover:bg-white">';
 
                         if (isset($row['gimage']) && !empty($row['gimage'])) {
-                           echo "<img class='gadget-img' src='../img/{$row['gimage']}' alt='Gadget Image'>";
+                           echo "<img class='h-auto w-full' src='../img/{$row['gimage']}' alt='Gadget Image'>";
                         }
 
                         echo '<section class="gadget-section">';
 
                         if (isset($row['gname']) && !empty($row['gname'])) {
-                           echo '<div class="gadget-name">' . $row['gname'] . '</div>';
+                           echo '<div class="text-slate-700 font-semibold mt-2">' . $row['gname'] . '</div>';
                         }
 
 
                         if (isset($row['gprice']) && !empty($row['gprice'])) {
-                           echo '<div class="gadget-price">Rs:' . $row['gprice'] . '</div>';
+                           echo '<div class="text-purple-500">Rs:' . $row['gprice'] . '</div>';
                         }
 
 
                         ?>
                         <!-- Display gadget rating with half stars -->
-                        <div class="gadget-rating">
-                           <?php
-                           $average_rating_formatted = number_format($average_rating, 1);
-
-
-                           $fullStars = floor($average_rating_formatted);
-                           $hasHalfStar = $average_rating_formatted - $fullStars >= 0.25;
-
-                           for ($i = 1; $i <= $fullStars; $i++) {
-                              echo '<i class="fa-solid fa-star" style="color:gold;"></i>'; // Full star
-                           }
-
-                           if ($hasHalfStar) {
-                              echo '<i class="fa-solid fa-star-half-stroke" style="color:gold;"></i>'; // Half star
-                           }
-
-                           $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
-
-                           for ($i = 1; $i <= $emptyStars; $i++) {
-                              echo '<i class="fa-regular fa-star" style="color:gold;"></i>';
-                           }
-
-                           echo " $average_rating_formatted";
-                           ?>
-                        </div>
-
+                        
+                        <?php displayRating($conn, $gadgetID); ?>
                   </section>
+                  </div>
                   </a>
 
                   <?php
@@ -163,13 +179,6 @@ do {
                      echo "No gadgets found.";
                   }
                   ?>
-            <div class="w-1/5 bg-slate-100 p-3 hover:bg-white">
-               <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt="" />
-               <div>
-                  <h3 class="text-slate-700 font-semibold mx-4 mt-2">iphone 14 pro max</h3>
-                  <p class="mx-4 text-purple-500"><span>&#36;760</span></p>
-               </div>
-            </div>
             </div>
             </section>
          </article>

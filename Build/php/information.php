@@ -2,14 +2,30 @@
 session_start();
 include 'dbconn.php';
 // Function to calculate average rating
-function calculateAverageRating($conn, $gadgetID)
-{
-   $query = "SELECT AVG(rating) AS average_rating FROM feedback WHERE g_id = :gadgetID";
-   $stmt = $conn->prepare($query);
-   $stmt->bindParam(':gadgetID', $gadgetID);
+require_once 'rating.php';
+
+if (isset($_SESSION['id'])) {
+   $id = $_SESSION['id'];
+   $uname = $_SESSION['uname'];
+}
+
+if (isset($_POST['add-cart'])) {
+   $id = $_SESSION['id'];
+   $g_id = $_POST['g_id'];
+   $name = $_POST['name'];
+   $quantity = $_POST['quantity'];
+   $price = $_POST['price'];
+
+   $sql = "INSERT INTO cart (id, g_id, name, quantity, price) VALUES (:id, :g_id, :name, :quantity, :price)";
+   $stmt = $conn->prepare($sql);
+   $stmt->bindParam(':id', $id);
+   $stmt->bindParam(':g_id', $g_id);
+   $stmt->bindParam(':name', $name);
+   $stmt->bindParam(':quantity', $quantity);
+   $stmt->bindParam(':price', $price);
    $stmt->execute();
-   $result = $stmt->fetch(PDO::FETCH_ASSOC);
-   return $result['average_rating'] ?? 0;
+   echo '<script>alert("Added.");</script>';
+
 }
 
 function hasUserReviewed($conn, $gadgetID, $username)
@@ -192,8 +208,6 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                         <?php
                         echo "<img class='w-full h-auto md:h-48 lg:h-64 xl:h-80 2xl:h-96 rounded-xl' src='../img/{$row['gimage']}' alt='Gadget Image'>";
                         ?>
-                        <img src="../img/sergio-de-paula-c_GmwfHBDzk-unsplash.jpg" alt=""
-                           class="w-full h-auto md:h-48 lg:h-64 xl:h-80 2xl:h-96 rounded-xl" />
                      </div>
                   </div>
                </section>
@@ -236,10 +250,21 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                               deserunt suscipit iure, error sed.
                            </p>
                         </div>
-                        <div class="flex items-center px-4 gap-5">
-                           <div>5</div>
-                           <button class="bg-purple-500 text-white p-3 rounded-xl hover:bg-purple-300">Add To cart</button>
-                        </div>
+                        <form action="" method="POST">
+                           <div class="flex items-center px-4 gap-5">
+                              <div class="cart-item">
+                                 <input type="number" name="quantity">
+                              </div>
+
+                              <input type="number" name="g_id" value="<?php echo $g_id ?>" hidden>
+                              <input type="text" name="name" value="<?php echo $row['gname'] ?>" hidden>
+                              <input type="number" name="price" value="<?php echo $row['gprice'] ?>" hidden>
+
+
+                           </div>
+                           <br>
+                           <input type="submit" class="bg-blue-500" name="add-cart" value="Add to Cart">
+                        </form>
                      </div>
                   </div>
                </section>
@@ -378,6 +403,11 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
    }
    ?>
    <script>
+      function showDeviceType(type) {
+         window.location.href = "category.php?type=" + type;
+      }
+   </script>
+   <script>
       document.addEventListener("DOMContentLoaded", function () {
          const showComparison = document.querySelector(".showcomparison");
          const showLink = document.querySelector(".showlink");
@@ -410,6 +440,7 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
          });
       });
    </script>
+   <script src="../javsscript/user.js"></script>
 </body>
 
 </html>
