@@ -13,7 +13,7 @@ use PSpell\Dictionary;
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
 // Calculate the offset based on the page number and limit
-$limit = 5;
+$limit = 10;
 $offset = ($page - 1) * $limit;
 
 $g_id;
@@ -38,6 +38,61 @@ do {
 } while ($i < $count);
 
 
+/// Handle Filter Submission
+if (isset($_GET['filter-submit'])) {
+   // Retrieve the submitted filter values
+   $category = isset($_GET['category']) ? $_GET['category'] : '';
+   $max_price = isset($_GET['max_price']) ? $_GET['max_price'] : '';
+   $type = isset($_GET['type']) ? $_GET['type'] : '';
+
+   // Construct the base SQL query
+   $sql = "SELECT product.*, AVG(feedback.rating) AS average_rating
+           FROM product
+           LEFT JOIN feedback ON product.g_id = feedback.g_id";
+
+   // Initialize an array to store WHERE clause conditions
+   $whereClause = [];
+
+   // Add conditions to the WHERE clause based on submitted filter values
+   if (!empty($category)) {
+      $whereClause[] = "category = :category";
+   }
+   if (!empty($max_price)) {
+      $whereClause[] = "gprice <= :max_price";
+   }
+   if (!empty($type)) {
+      $whereClause[] = "type = :type";
+   }
+
+   // If there are any conditions in the WHERE clause, append them to the SQL query
+   if (!empty($whereClause)) {
+      $sql .= " WHERE " . implode(" AND ", $whereClause);
+   }
+
+   // Group by product ID
+   $sql .= " GROUP BY product.g_id";
+
+   // Modify the SQL query to include the limit and offset
+   $sql .= " LIMIT $limit OFFSET $offset";
+
+   // Prepare the SQL statement
+   $stmt = $conn->prepare($sql);
+
+   // Bind parameters if necessary
+   if (!empty($category)) {
+      $stmt->bindParam(':category', $category);
+   }
+   if (!empty($max_price)) {
+      $stmt->bindParam(':max_price', $max_price);
+   }
+   if (!empty($type)) {
+      $stmt->bindParam(':type', $type);
+   }
+
+   // Execute the query
+   $stmt->execute();
+   $value = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -143,19 +198,20 @@ do {
       <button class="hidden sm:text-slate-900"></button>
    </header>
    <main class="bg-slate-300 w-full">
-      <article class="bg-slate-300 w-full px-16 flex items-center justify-center">
+      <article class="bg-slate-300 w-full px-16 flex items-start justify-center">
          <article class="w-4/5">
             <section>
                <div class="bg-purple-300 p-5 flex item-center gap-4 flex-wrap ">
                   <?php
                   $sql = "SELECT product.*, AVG(feedback.rating) AS average_rating
-                 FROM product
-                 LEFT JOIN feedback ON product.g_id = feedback.g_id
-                 GROUP BY product.g_id";
+                  FROM product
+                  LEFT JOIN feedback ON product.g_id = feedback.g_id";
                   if (isset($_GET['type'])) {
                      $type = $_GET['type'];
-                     $sql .= " WHERE type = '$type'";
+                     $sql .= " WHERE product.type = '$type'";
                   }
+                  $sql .= " GROUP BY product.g_id";
+
 
                   // Get the total count of rows without limit and offset
                   $totalRows = $conn->query($sql)->rowCount();
@@ -174,23 +230,23 @@ do {
                         $gadget_id = $row['g_id'];
                         $average_rating = $row['average_rating'];
 
-                        echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item w-1/4 inline-block">';
+                        echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item w-[23.5%] h-1/4 inline-block border rounded-lg overflow-hidden shadow-md">';
                         echo '<div class="w-full bg-slate-100 p-3 hover:bg-white">';
 
                         if (isset($row['gimage']) && !empty($row['gimage'])) {
-                           echo "<img class='h-auto w-full' src='../img/{$row['gimage']}' alt='Gadget Image'>";
+                           echo "<img class='h-60 w-full object-fill' src='../img/{$row['gimage']}' alt='Gadget Image'>";
+
                         }
 
-                        echo '<section class="gadget-section">';
+                        echo '<section class="gadget-section mt-2 text-center">';
 
                         if (isset($row['gname']) && !empty($row['gname'])) {
-                           echo '<div class="text-slate-700 font-semibold mt-2">' . $row['gname'] . '</div>';
+                           echo '<div class="text-slate-700 font-semibold">' . $row['gname'] . '</div>';
                         }
 
                         if (isset($row['gprice']) && !empty($row['gprice'])) {
                            echo '<div class="text-purple-500">Rs:' . $row['gprice'] . '</div>';
                         }
-
                         ?>
                         <!-- Display gadget rating with half stars -->
                         <?php displayRating($conn, $gadgetID); ?>
@@ -208,7 +264,9 @@ do {
             </div>
             </section>
          </article>
-         <article class="bg-slate-600 w-1/5">
+
+
+         <article class="bg-slate-600 w-1/6">
             <div id="filter-section" class="mr-10">
                <h1 class="text-xl font-bold mb-4">Filter Gadgets</h1>
                <form action="" method="GET" class="filter-form">
@@ -220,10 +278,24 @@ do {
                               <option value="">All Categories</option>
                               <option value="bestbuy">Best Buy</option>
                               <option value="deals">Deals</option>
+                              <!-- Add more options as needed -->
                            </select>
                         </div>
                         <input type="number" class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full"
                            name="max_price" placeholder="Max Price">
+
+                        <!-- New select field for type -->
+                        <select name="type" id="type-filter"
+                           class="border border-gray-300 rounded px-3 py-2 w-full mb-2">
+                           <option value="">All Brands</option>
+                           <option value="Apple">Apple</option>
+                           <option value="Samsung">Samsung</option>
+                           <option value="Xiaomi">Xiaomi</option>
+                           <option value="Realme">Realme</option>
+                           <option value="Oneplus">Oneplus</option>
+                           <!-- Add more options as needed -->
+                        </select>
+
                         <button type="submit"
                            class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                            name="filter-submit" id="filter-submit">Filter</button>

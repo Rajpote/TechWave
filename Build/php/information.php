@@ -262,11 +262,9 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                            </div>
                         </div>
                         <div class="py-5 w-3/4">
-                           <p>
-                              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ad recusandae itaque facere,
-                              quae, facilis animi saepe id aut inventore ipsum reiciendis odit porro veritatis
-                              deserunt suscipit iure, error sed.
-                           </p>
+                        <?php
+                              echo "<p class='gprice'>{$row['gdis']} </p>";
+                              ?>
                         </div>
                         <form action="" method="POST" class="flex items-center px-4 gap-5">
                            <div class="cart-item">
@@ -291,77 +289,33 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div>
                      <ul class="flex items-center gap-4 p-2">
                         <li class="p-2 hover:bg-purple-500 rounded-md hover:text-white bg-slate-400"><a
-                              href="#discription">Discription</a></li>
-                        <li class="p-2 hover:bg-purple-500 rounded-md hover:text-white bg-slate-400"><a
                               href="#specification">Specification</a></li>
                         <li class="p-2 hover:bg-purple-500 rounded-md hover:text-white bg-slate-400"><a
                               href="#review">Review</a></li>
                      </ul>
                   </div>
                </section>
-               <section id="discription">
-                  <?php
-                  $gdis = explode("\n", $row['gdis']);
-                  echo "<ul>";
-                  foreach ($gdis as $point) {
-                     echo "<li class='points' style='font-size: 1.15rem;'>$point</li>";
-                  }
-                  echo "</ul>";
-                  ?>
-               </section>
                <section id="specification">
-                  <table>
+                  <table class="w-2/3 border-collapse border border-gray-300">
                      <tr>
-                        <th class="table-heading">
+                        <th class="table-heading p-3 bg-gray-200 text-left">
                            <?php echo $row['gname']; ?>
                         </th>
-                        <?php
-
-                        foreach ($selectedGadgetDetails as $selectedGadget) {
-                           echo '<th class="table-heading">' . $selectedGadget['gname'] . '</th>';
-                        }
-                        ?>
                      </tr>
                      <tr>
-                        <td class="table-body">
+                        <td class="table-body p-3">
                            <?php
-                           $gspecifation = explode("\n", $row['gspecification']);
-                           echo "<ul>";
-                           foreach ($gspecifation as $point) {
-                              echo "<li class='point' style='font-size: 1.15rem; margin-bottom: 1vh; text-align: justify;'>$point</li>";
+                           $gspecification = explode("\n", $row['gspecification']);
+                           echo "<ul class='list-disc pl-5'>";
+                           foreach ($gspecification as $point) {
+                              echo "<li class='text-base mb-2 list-none'>" . $point . "</li>";
                            }
                            echo "</ul>";
                            ?>
                         </td>
-                        <td class="table-body">
-                           <p>Gadgets comparison:</p>
-                           <form class="compare-form" action="" method="POST">
-                              <div class="select-container">
-                                 <select name="comparison_gadgets[]">
-                                    <?php
-                                    foreach ($comparisonGadgets as $compGadget) {
-                                       echo '<option value="' . $compGadget['g_id'] . '">' . $compGadget['gname'] . '</option>';
-                                    }
-                                    ?>
-                                 </select>
-                              </div>
-                              <input type="submit" name="compare-submit" value="Compare">
-                           </form>
-                           <?php
-                           if (count($selectedGadgetDetails) > 0) {
-                              foreach ($selectedGadgetDetails as $selectedGadget) {
-                                 $selectedSpecs = explode("\n", $selectedGadget['gspecification']);
-                                 echo "<ul>";
-                                 foreach ($selectedSpecs as $spec) {
-                                    echo "<li class='point' style='font-size: 1.15rem; margin-bottom: 1vh; text-align: justify;'>$spec</li>";
-                                 }
-                                 echo "</ul>";
-                              }
-                           }
-                           ?>
-                        </td>
                      </tr>
                   </table>
+
                </section>
                <section id="review" class="py-8 flex items-center w-full">
                   <!-- Feedback Form -->
@@ -423,7 +377,7 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                               }
                            }
                         } else {
-                           echo "No feedback records found for gadget ID: " . $g_id;
+                           echo "No feedback records found for gadget  ";
                         }
                         ?>
 

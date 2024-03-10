@@ -149,33 +149,30 @@ do {
                <!-- Additional required wrapper -->
                <div class="swiper-wrapper h-full w-full ease-in-out">
                   <!-- Slides -->
-                  <div class="swiper-slide">
-                     <img src=" ../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt=""
-                        class="h-[70vh] w-full bg-cover block" />
-                     <div class="absolute top-[30%] left-2 w-auto">
-                        <h3 class="text-5xl text-slate-200 font-bold">hello world</h3>
-                        <p class="text-2xl w-2/5 font-serif">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                           Blanditiis dicta inventore excepturi quae? A, in.</p>
-                     </div>
-                  </div>
-                  <div class="swiper-slide">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt=""
-                        class="h-[70vh] w-full bg-cover block" />
-                     <div class="absolute top-[30%] left-2 w-auto">
-                        <h3 class="text-5xl text-slate-200 font-bold">hello world</h3>
-                        <p class="text-2xl w-2/5 font-serif">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                           Blanditiis dicta inventore excepturi quae? A, in.</p>
-                     </div>
-                  </div>
-                  <div class="swiper-slide">
-                     <img src="../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg" alt=""
-                        class="h-[70vh] w-full bg-cover block" />
-                     <div class="absolute top-[30%] left-2 w-auto">
-                        <h3 class="text-5xl text-slate-200 font-bold">hello world</h3>
-                        <p class="text-2xl w-2/5 font-serif">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                           Blanditiis dicta inventore excepturi quae? A, in.</p>
-                     </div>
-                  </div>
+                  <?php
+                  $sql = "SELECT * FROM product WHERE category = 'article' LIMIT 3";
+                  $stmt = $conn->query($sql);
+
+                  if ($stmt->rowCount() > 0) {
+                     while ($row = $stmt->fetch()) {
+                        ?>
+                        <div class="swiper-slide">
+                           <img src="../img/<?php echo $row['imagetwo']; ?>" alt="" class="h-[70vh] w-full bg-cover block" />
+                           <div class="absolute top-[30%] left-2 w-auto">
+                              <h3 class="text-5xl text-slate-500 font-bold">
+                                 <?php echo $row['gname']; ?>
+                              </h3>
+                              <p class="text-lg w-2/5 font-serif mt-3">Rs
+                                 <?php echo $row['gdis']; ?>
+                              </p>
+                           </div>
+                        </div>
+                        <?php
+                     }
+                  } else {
+                     echo "No deals found.";
+                  }
+                  ?>
                </div>
                <!-- If we need pagination -->
                <div class="swiper-pagination"></div>
@@ -185,6 +182,7 @@ do {
                <div class="swiper-button-next"></div>
             </div>
          </section>
+
          <hr />
          <section class="px-10 my-10">
             <div>
@@ -192,7 +190,7 @@ do {
                <div class="mx-20 my-5">
                   <div class="flex items-center justify-center gap-9">
                      <?php
-                     $sql = "SELECT * FROM product WHERE category = 'deals' LIMIT 6";
+                     $sql = "SELECT * FROM product WHERE category = 'bestbuy' LIMIT 4";
                      $stmt = $conn->query($sql);
 
                      if ($stmt->rowCount() > 0) {
@@ -208,7 +206,7 @@ do {
                                        <h3 class="text-slate-700 font-semibold">
                                           <?php echo $row['gname']; ?>
                                        </h3>
-                                       <p class="text-purple-500"><span>&#36;
+                                       <p class="text-purple-500"><span>Rs
                                              <?php echo $row['gprice']; ?>
                                           </span></p>
                                     </div>
@@ -236,33 +234,31 @@ do {
          <section class="px-10 my-10">
             <div class="main_product">
                <h2 class="text-3xl text-slate-800">Deals</h2>
-               <div class="flex items-center justify-evenly gap-6 max-h-full mt-4">
-                  <div class="bg-slate-300 w-1/3 rounded-xl">
-                     <div class="pro-container">
-                        <?php
-                        $sql = "SELECT * FROM product WHERE category = 'deals' limit 6";
-                        $stmt = $conn->query($sql);
+               <div class="flex items-center justify-evenly max-h-full w-full gap-4 mt-4 rounded-xl">
+                  <div class=" w-full rounded-xl flex justify-evenly items-center">
+                     <?php
+                     $sql = "SELECT * FROM product WHERE category = 'deals' limit 3";
+                     $stmt = $conn->query($sql);
 
-                        if ($stmt->rowCount() > 0) {
-                           while ($row = $stmt->fetch()) {
-                              $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
-                              echo '<a href="information.php?g_id=' . $row['g_id'] . '" class="slider-card">';
-                              echo '<div class="w-full h-44 p-3">';
-                              echo '<img class="h-full w-full rounded-xl" src="../img/' . $row['gimage'] . '" alt="Gadget Image">';
-                              echo '</div>';
-                              echo '<div class="text-slate-500 text-left p-1 m-2">';
-                              echo '<p class="pro-name">' . $row['gname'] . '</p>';
-                              echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
-                              echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
-                              echo '</div>';
-                              echo '</a>';
-                           }
-
-                        } else {
-                           echo "No deals found.";
+                     if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch()) {
+                           $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
+                           echo '<a href="information.php?g_id=' . $row['g_id'] . '" class="rounded-xl slider-card m-4 bg-slate-300">';
+                           echo '<div class="w-full h-44 p-3 ">';
+                           echo '<img class="h-full w-full rounded-xl" src="../img/' . $row['imageone'] . '" alt="Gadget Image">';
+                           echo '</div>';
+                           echo '<div class="text-slate-500 text-left p-1 m-2">';
+                           echo '<p class="pro-name">' . $row['gname'] . '</p>';
+                           echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
+                           echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
+                           echo '</div>';
+                           echo '</a>';
                         }
-                        ?>
-                     </div>
+
+                     } else {
+                        echo "No deals found.";
+                     }
+                     ?>
                   </div>
                </div>
             </div>

@@ -22,9 +22,9 @@ if (isset($_POST['submit'])) {
     $gprice = $_POST['gprice'];
 
     // Check if the gadget already exists
-    $sql = "SELECT * FROM product WHERE g_id = ? AND gdis = ?";
+    $sql = "SELECT * FROM product WHERE g_id = ? AND gspecification = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$g_id, $gdis]);
+    $stmt->execute([$g_id, $gspecification]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
@@ -150,23 +150,26 @@ if (isset($_POST['update-submit'])) {
                             <div class="select-container mb-2">
                                 <select name="type" id="type" class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="select">select</option>
-                                    <option value="laptop">laptop</option>
-                                    <option value="phone">phone</option>
-                                    <option value="accessories">Accessories</option>
+                                    <option value="Apple">Apple</option>
+                                    <option value="Samsung">Samsung</option>
+                                    <option value="Xiaomi">Xiaomi</option>
+                                    <option value="Realme">Realme</option>
+                                    <option value="Oneplus">Oneplus</option>
                                 </select>
+
                                 <select name="category" id="category"
                                     class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="select">select</option>
                                     <option value="bestbuy">best buy</option>
                                     <option value="deals">deals</option>
+                                    <option value="article">article</option> <!-- Corrected typo -->
                                 </select>
                             </div>
                             <input type="text" class="abbreviation border border-gray-300 rounded px-3 py-2 mb-2 w-full"
                                 name="gname" id="gname" placeholder="Gadget Name" required>
                             <input type="file" class="image border border-gray-300 rounded px-3 py-2 mb-2 w-full"
                                 name="gimage" id="gimage" placeholder="Gadget Image URL" required>
-                            <textarea name="gdis" id="gdis" cols="60" rows="7" placeholder="Gadget Description"
-                                class="border border-gray-300 rounded px-3 py-2 mb-2 w-full"></textarea>
+
                             <div class="box-content">
                                 <div class="con">
                                     <input type="file"
@@ -185,6 +188,8 @@ if (isset($_POST['update-submit'])) {
                             <textarea name="gspecification" id="gspecification" cols="60" rows="7"
                                 placeholder="Gadget Specification"
                                 class="border border-gray-300 rounded px-3 py-2 mb-2 w-full" required></textarea>
+                            <textarea name="gdis" id="gdis" cols="60" rows="7" placeholder="Gadget Description"
+                                class="border border-gray-300 rounded px-3 py-2 mb-2 w-full"></textarea>
                             <center>
                                 <input type="submit"
                                     class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -219,6 +224,7 @@ if (isset($_POST['update-submit'])) {
                                     <option value="select">select</option>
                                     <option value="bestbuy">best buy</option>
                                     <option value="deals">deals</option>
+                                    <option value="article">article</option>
                                 </select>
                             </div>
                             <div class="box-content">
