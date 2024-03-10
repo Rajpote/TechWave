@@ -59,44 +59,44 @@ if (isset($_POST['login_submit'])) {
          style="background-image: url(../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg)">
          <div>
             <div class="p-10 backdrop-blur-xl rounded-xl">
-               <form action="" method="post">
-                  <div class="flex flex-col">
+               <form action="" method="post" class="flex flex-col space-y-4">
+                  <div>
                      <label for="email" class="text-slate-700 font-semibold font-serif">Email</label>
                      <input type="text" name="email" id="email" placeholder="example@gmail.com"
-                        class="px-2 py-1 rounded-md border-b-4 bg-transparent focus-within:bg-white focus:outline-none" />
-
+                        class="px-4 py-2 rounded-md border-b-2 bg-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300" />
+                  </div>
+                  <div>
                      <label for="password" class="text-slate-700 font-semibold font-serif">Password</label>
                      <div class="relative">
                         <input type="password" name="password" id="passwordField"
-                           class="px-2 py-1 rounded-md border-b-4 bg-transparent focus-within:bg-white focus:outline-none" />
-                        <span id="togglePassword" class="absolute top-0 right-0 mt-2 mr-2 cursor-pointer"><i
-                              class="fas fa-eye" id="toggleIcon"></i></span>
+                           class="px-4 py-2 rounded-md border-b-2 bg-transparent focus:outline-none focus:border-blue-500 transition-colors duration-300" />
+                        <span id="togglePassword"
+                           class="absolute top-0 right-0 mt-2 mr-4 cursor-pointer text-slate-700"><i class="fas fa-eye"
+                              id="toggleIcon"></i></span>
                      </div>
                   </div>
-                  <div class="flex justify-between px-0 py-1 gap-4">
-                     <a href="" class="text-purple-700">Forget Password</a>
-                     <a href="signup.php" class="text-blue-800">Sign</a>
+                  <div class="flex justify-between items-center">
+                     <a href="" class="text-purple-700 text-sm">Forget Password</a>
+                     <a href="signup.php" class="text-blue-800 text-sm">Sign Up</a>
                   </div>
                   <div class="flex justify-center">
-                     <button type="submit"
-                        class="bg-slate-500 rounded-xl my-3 hover:scale-110 shadow hover:shadow-xl ease-in px-4 py-3 font-bold"
-                        name="login_submit">Login</button>
+                     <button type="submit" name="login_submit"
+                        class="bg-slate-500 rounded-lg my-3 hover:scale-110 shadow-lg hover:shadow-xl transition-transform ease-in px-6 py-3 font-bold text-white">Login</button>
                   </div>
                </form>
                <!-- Error toast for failed login -->
                <?php if (isset($loginError)): ?>
-                  <alert id="loginErrorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                     <div class="toast-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                     </div>
-                     <div class="toast-body">
+                  <div id="loginErrorToast" class="toast bg-red-500 text-white px-4 py-2 rounded-md">
+                     <button type="button" class="ml-auto focus:outline-none">&times;</button>
+                     <p>
                         <?php echo $loginError; ?>
-                     </div>
-                  </alert>
+                     </p>
+                  </div>
                <?php endif; ?>
             </div>
          </div>
       </section>
+
    </main>
    <script src="../javsscript/signup.js"></script>
 </body>

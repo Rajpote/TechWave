@@ -1,14 +1,13 @@
 <?php
-// session_start();
-
-
-use PSpell\Dictionary;
-
+session_start();
 include 'dbconn.php';
 require_once 'rating.php';
-// if (!isset($_SESSION['username'])) {
-//    header('location: home.php');
-// }
+if (!isset($_SESSION['uname'])) {
+   header('location: home.php');
+   exit(); // Ensure that the script stops here if the user is not logged in.
+}
+
+use PSpell\Dictionary;
 
 // Determine the current page number
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -39,6 +38,7 @@ do {
 } while ($i < $count);
 
 
+
 ?>
 
 
@@ -56,8 +56,9 @@ do {
       crossorigin="anonymous" referrerpolicy="no-referrer" />
    <style>
       .pagination {
-         margin: 20px auto;
+         margin: 0px auto;
          text-align: center;
+         padding: 10px;
       }
 
       .pagination .page-link {
@@ -95,21 +96,48 @@ do {
       <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
       <nav class="">
          <ul class="flex items-center text-black gap-5">
-            <li><a href="index.php" class="hover:text-yellow-500">Home</a></li>
+            <li><a href="home.php" class="hover:text-yellow-500">Home</a></li>
             <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
-            <li><a href="home.php" class="hover:text-yellow-500">Contact</a></li>
+            <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
          </ul>
       </nav>
       <div>
-         <input type="text" name="" id="" class="rounded-xl" />
+         <form action="search.php" method="post" class="flex items-center relative">
+            <input type="text" name="search"
+               class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+               placeholder="Search . . . " id="search" />
+            <button type="submit"
+               class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+               <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+            </button>
+         </form>
       </div>
       <div class="flex items-center justify-center gap-6">
          <div>
             <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
-         <div class="gap-2 inline-block w-auto h-auto">
-            <i
-               class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i>
+         <div>
+            <button id="popup-button"><i
+                  class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
+            <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+            <div id="popup-container"
+               class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+               <div class="relative">
+                  <button id="close-popup"
+                     class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
+                  <div id="username" class="container mt-6">
+                     <?php echo $_SESSION['uname'] ?>
+
+                     <div class="update-user">
+                        <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                     </div>
+                     <div class="logout">
+                        <a href="logout.php">logout</a>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
          </div>
       </div>
       <button class="hidden sm:text-slate-900"></button>
@@ -118,7 +146,7 @@ do {
       <article class="bg-slate-300 w-full px-16 flex items-center justify-center">
          <article class="w-4/5">
             <section>
-               <div class="bg-purple-300 p-5 flex flex-wrap gap-5">
+               <div class="bg-purple-300 p-5 flex item-center gap-4 flex-wrap ">
                   <?php
                   $sql = "SELECT product.*, AVG(feedback.rating) AS average_rating
                  FROM product
@@ -146,8 +174,8 @@ do {
                         $gadget_id = $row['g_id'];
                         $average_rating = $row['average_rating'];
 
-                        echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item">';
-                        echo '<div class="w-2/5 bg-slate-100 p-3 hover:bg-white">';
+                        echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item w-1/4 inline-block">';
+                        echo '<div class="w-full bg-slate-100 p-3 hover:bg-white">';
 
                         if (isset($row['gimage']) && !empty($row['gimage'])) {
                            echo "<img class='h-auto w-full' src='../img/{$row['gimage']}' alt='Gadget Image'>";
@@ -159,16 +187,14 @@ do {
                            echo '<div class="text-slate-700 font-semibold mt-2">' . $row['gname'] . '</div>';
                         }
 
-
                         if (isset($row['gprice']) && !empty($row['gprice'])) {
                            echo '<div class="text-purple-500">Rs:' . $row['gprice'] . '</div>';
                         }
 
-
                         ?>
                         <!-- Display gadget rating with half stars -->
-                        
                         <?php displayRating($conn, $gadgetID); ?>
+
                   </section>
                   </div>
                   </a>
@@ -182,7 +208,30 @@ do {
             </div>
             </section>
          </article>
-         <article class="bg-slate-600 w-1/5">filyer</article>
+         <article class="bg-slate-600 w-1/5">
+            <div id="filter-section" class="mr-10">
+               <h1 class="text-xl font-bold mb-4">Filter Gadgets</h1>
+               <form action="" method="GET" class="filter-form">
+                  <div class="input-container">
+                     <div class="filterbox">
+                        <div class="select-container mb-2">
+                           <select name="category" id="category-filter"
+                              class="border border-gray-300 rounded px-3 py-2 w-full mb-2">
+                              <option value="">All Categories</option>
+                              <option value="bestbuy">Best Buy</option>
+                              <option value="deals">Deals</option>
+                           </select>
+                        </div>
+                        <input type="number" class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                           name="max_price" placeholder="Max Price">
+                        <button type="submit"
+                           class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                           name="filter-submit" id="filter-submit">Filter</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </article>
       </article>
       <center>
          <div class="pagination">
@@ -233,6 +282,7 @@ do {
          </ul>
       </div>
    </footer>
+   <script src="../javsscript/user.js"></script>
 </body>
 
 </html>

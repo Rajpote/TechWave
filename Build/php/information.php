@@ -101,15 +101,6 @@ $stmt->bindParam(':type', $result[0]['type']); // Filter by the type of the curr
 $stmt->execute();
 $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-// Query to retrieve feedback for the gadget
-$sqlFeedback = "SELECT f.*, u.uname FROM feedback f
-                JOIN registration u ON f.uname = u.uname
-                WHERE f.g_id = :gadgetID";
-$stmtFeedback = $conn->prepare($sqlFeedback);
-$stmtFeedback->bindParam(':gadgetID', $g_id);
-$stmtFeedback->execute();
-$feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -177,30 +168,57 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
    if (count($result) > 0) {
       foreach ($result as $row) {
          ?>
-         <header class="bg-white-400 px-20 py-3 flex items-center justify-between sticky top-0 z-10 bg-slate-200">
+         <header class="bg-white-400 px-20 py-3 flex items-center justify-between fixed top-0 z-10 bg-slate-200 w-full">
             <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
             <nav class="">
                <ul class="flex items-center text-black gap-5">
-                  <li><a href="index.php" class="hover:text-yellow-500">Home</a></li>
+                  <li><a href="home.php" class="hover:text-yellow-500">Home</a></li>
                   <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
-                  <li><a href="home.php" class="hover:text-yellow-500">Contact</a></li>
+                  <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
                </ul>
             </nav>
             <div>
-               <input type="text" name="" id="" class="rounded-xl" />
+               <form action="search.php" method="post" class="flex items-center relative">
+                  <input type="text" name="search"
+                     class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                     placeholder="Search . . . " id="search" />
+                  <button type="submit"
+                     class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+                     <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                  </button>
+               </form>
             </div>
             <div class="flex items-center justify-center gap-6">
                <div>
                   <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
                </div>
-               <div class="gap-2 inline-block w-auto h-auto">
-                  <i
-                     class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i>
+               <div>
+                  <button id="popup-button"><i
+                        class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
+                  <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+                  <div id="popup-container"
+                     class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+                     <div class="relative">
+                        <button id="close-popup"
+                           class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
+                        <div id="username" class="container mt-6">
+                           <?php echo $_SESSION['uname'] ?>
+
+                           <div class="update-user">
+                              <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                           </div>
+                           <div class="logout">
+                              <a href="logout.php">logout</a>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
                </div>
             </div>
             <button class="hidden sm:text-slate-900"></button>
          </header>
-         <main class="mx-10">
+         <main class="mx-10 mt-20">
             <article class="flex items-center justify-center px-10 gap-6 mt-[-10px]">
                <section>
                   <div>
@@ -224,11 +242,11 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                               $rating = round($averageRating * 2) / 2;
                               for ($i = 1; $i <= 5; $i++) {
                                  if ($i <= $rating) {
-                                    echo '<i class="fas fa-star"></i>';
+                                    echo '<i class="fas fa-star text-yellow-400"></i>';
                                  } elseif ($i - 0.5 == $rating) {
-                                    echo '<i class="fas fa-star-half-alt"></i>';
+                                    echo '<i class="fas fa-star-half-alt text-yellow-400"></i>';
                                  } else {
-                                    echo '<i class="far fa-star"></i>';
+                                    echo '<i class="far fa-star text-yellow-400"></i>';
                                  }
                               }
                               ?>
@@ -250,25 +268,23 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                               deserunt suscipit iure, error sed.
                            </p>
                         </div>
-                        <form action="" method="POST">
-                           <div class="flex items-center px-4 gap-5">
-                              <div class="cart-item">
-                                 <input type="number" name="quantity">
-                              </div>
-
-                              <input type="number" name="g_id" value="<?php echo $g_id ?>" hidden>
-                              <input type="text" name="name" value="<?php echo $row['gname'] ?>" hidden>
-                              <input type="number" name="price" value="<?php echo $row['gprice'] ?>" hidden>
-
-
+                        <form action="" method="POST" class="flex items-center px-4 gap-5">
+                           <div class="cart-item">
+                              <input type="number" name="quantity"
+                                 class="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500">
                            </div>
-                           <br>
-                           <input type="submit" class="bg-blue-500" name="add-cart" value="Add to Cart">
+                           <input type="number" name="g_id" value="<?php echo $g_id ?>" hidden>
+                           <input type="text" name="name" value="<?php echo $row['gname'] ?>" hidden>
+                           <input type="number" name="price" value="<?php echo $row['gprice'] ?>" hidden>
+                           <input type="submit"
+                              class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                              name="add-cart" value="Add to Cart">
                         </form>
                      </div>
                   </div>
                </section>
             </article>
+
             <hr />
             <article class="px-10 my-10">
                <section class="w-1/3 shadow-md rounded-xl">
@@ -347,14 +363,14 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                      </tr>
                   </table>
                </section>
-               <section id="review">
+               <section id="review" class="py-8 flex items-center w-full">
                   <!-- Feedback Form -->
-                  <form action="" method="POST" class="feedback-link">
-                     <div class="feedback-username">
+                  <form action="" method="POST" class="feedback-link bg-gray-100 p-4 rounded-md w-1/3">
+                     <div class="feedback-username text-lg font-bold mb-4">
                         <?php echo $_SESSION['uname']; ?>
                      </div>
                      <div class="container">
-                        <div class="rating">
+                        <div class="rating mb-4">
                            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" class="full"
                               title="Awesome"></label>
                            <input type="radio" id="star4.5" name="rating" value="4.5" /><label for="star4.5"
@@ -373,25 +389,44 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
                               class="half"></label>
                         </div>
                      </div>
-                     <textarea name="feedback" id="" cols="20" rows="3" class="textarea" required></textarea>
-                     <div class="feedback" id="submit-btn">
-                        <input type="submit" name="feedback-submit" id="feedback-btn" value="Submit" />
+                     <textarea name="feedback" id="" cols="20" rows="3"
+                        class="textarea w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        required></textarea>
+                     <div class="feedback text-center mt-4" id="submit-btn">
+                        <input type="submit" name="feedback-submit" id="feedback-btn" value="Submit"
+                           class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-md cursor-pointer" />
                      </div>
                   </form>
-                  <div class="submitted-feedback">
-                     <h2>Reviews</h2>
-                     <ul>
+                  <div class="submitted-feedback  mt-8 w-full">
+                     <h2 class="text-xl font-bold mb-4">Reviews</h2>
+                     <ul class="p-4">
                         <?php
-                        foreach ($feedbackResults as $feedback) {
-                           if ($feedback['status'] === 'Approved') {
-                              echo '<li>';
-                              echo '<strong>Username:</strong> ' . $feedback['uname'] . '<br>';
-                              echo '<strong>Rating:</strong> ' . $feedback['rating'] . '<br>';
-                              echo '<strong>Feedback:</strong> ' . $feedback['feedback'];
-                              echo '</li>';
+                        // Prepare SQL command
+                        $sqlFeedback = "SELECT * FROM feedback WHERE g_id = :gadgetID";
+                        $stmtFeedback = $conn->prepare($sqlFeedback);
+                        $stmtFeedback->bindParam(':gadgetID', $g_id);
+                        $stmtFeedback->execute();
+
+                        // Fetch feedback results
+                        $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Check if any feedback records are returned
+                        if ($stmtFeedback->rowCount() > 0) {
+                           // Loop through the feedback results and display approved reviews
+                           foreach ($feedbackResults as $feedback) {
+                              if ($feedback['status'] === 'Approved') {
+                                 echo '<li class="bg-red-200 rounded-md my-2 p-4">';
+                                 echo '<strong><i class="fa-solid fa-user"></i>:</strong> ' . $feedback['uname'] . '<br>';
+                                 echo '<strong><i class="fas fa-star text-yellow-500"></i>:</strong> ' . $feedback['rating'] . '<br>';
+                                 echo '' . $feedback['feedback'];
+                                 echo '</li>';
+                              }
                            }
+                        } else {
+                           echo "No feedback records found for gadget ID: " . $g_id;
                         }
                         ?>
+
                      </ul>
                   </div>
                </section>
@@ -407,39 +442,7 @@ $feedbackResults = $stmtFeedback->fetchAll(PDO::FETCH_ASSOC);
          window.location.href = "category.php?type=" + type;
       }
    </script>
-   <script>
-      document.addEventListener("DOMContentLoaded", function () {
-         const showComparison = document.querySelector(".showcomparison");
-         const showLink = document.querySelector(".showlink");
-         const showFeedback = document.querySelector(".showfeedback");
 
-
-         const comparisonContainer = document.querySelector(".comparison-container");
-         const linkContainer = document.querySelector(".link-container");
-         const feedbackContainer = document.querySelector(".feedback-container");
-
-         linkContainer.style.display = "none";
-         feedbackContainer.style.display = "none";
-
-         showComparison.addEventListener("click", function () {
-            linkContainer.style.display = "none";
-            feedbackContainer.style.display = "none";
-            comparisonContainer.style.display = "block";
-         });
-
-         showLink.addEventListener("click", function () {
-            linkContainer.style.display = "block";
-            feedbackContainer.style.display = "none";
-            comparisonContainer.style.display = "none";
-         });
-
-         showFeedback.addEventListener("click", function () {
-            linkContainer.style.display = "none";
-            feedbackContainer.style.display = "block";
-            comparisonContainer.style.display = "none";
-         });
-      });
-   </script>
    <script src="../javsscript/user.js"></script>
 </body>
 

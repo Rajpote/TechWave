@@ -5,7 +5,7 @@ require_once 'dbconn.php';
 // if (!isset($_SESSION['adminname'])) {
 //     header('location: home.php');
 // }
-//     ?>
+//           ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@ require_once 'dbconn.php';
 </head>
 
 <body>
-    <!-- <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
+    <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
         <div class="italic text-yellow-400 bg-black py-2 mx-10 px-3 rounded-2xl ml-10">TechWave</div>
         <nav class="my-10">
             <ul class="">
@@ -57,41 +57,49 @@ require_once 'dbconn.php';
                 </li>
             </ul>
         </nav>
-    </header> -->
-    <main class="mr-32 my-0">
+    </header>
+    <main class="flex items-center justify-center mt-20">
         <div class="data">
-            <h1>user details</h1>
+            <h1 class="text-2xl font-semibold capitalize">user details</h1>
             <?php
             $query = "SELECT * FROM registration";
             $stmt = $conn->query($query);
             $total = $stmt->rowCount();
             $count = 1;
-            if ($total != 0) {
-                ?>
-                <table border="1">
+            if ($total != 0)
+            ?>
+            <table class="border-collapse border border-gray-400">
+                <thead>
                     <tr>
-                        <th>S.N.</th>
-                        <th>User Name</th>
-                        <th>Ph number</th>
-                        <th>E-mail</th>
-                        <th>Operations</th>
+                        <th class="p-2 border border-gray-400">S.N.</th>
+                        <th class="p-2 border border-gray-400">User Name</th>
+                        <th class="p-2 border border-gray-400">Ph number</th>
+                        <th class="p-2 border border-gray-400">E-mail</th>
+                        <th class="p-2 border border-gray-400">Operations</th>
                     </tr>
+                </thead>
+                <tbody>
                     <?php
                     while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "
-                            <tr>
-                                <td>" . $count++ . "</td>
-                                <td>" . $result["uname"] . "</td>
-                                <td>" . $result["phnumber"] . "</td>
-                                <td>" . $result["email"] . "</td>
-                                <td><a href='delete.php?id=" . $result['id'] . "'><input type='submit' value='delete' class='delete' name='delete-user'></a></td>
-                            </tr>    
-                            ";
+            <tr>
+                <td class='p-2 border border-gray-400 text-center'>" . $count++ . "</td>
+                <td class='p-2 border border-gray-400'>" . $result["uname"] . "</td>
+                <td class='p-2 border border-gray-400'>" . $result["phnumber"] . "</td>
+                <td class='p-2 border border-gray-400'>" . $result["email"] . "</td>
+                <td class='p-2 border border-gray-400'>
+                    <a href='delete/delete.php?id=" . $result['id'] . "'>
+                        <button class='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded'>
+                            Delete
+                        </button>
+                    </a>
+                </td>
+            </tr>";
                     }
-            }
-            ?>
+                    ?>
+                </tbody>
             </table>
-        </div>
+
     </main>
 </body>
 

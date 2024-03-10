@@ -12,7 +12,6 @@ error_reporting(E_ALL);
 if (isset($_POST['submit'])) {
     $g_id = $_POST['g_id'];
     $type = $_POST['type'];
-    $pricerange = $_POST['pricerange'];
     $category = $_POST['category'];
     $gname = $_POST['gname'];
     $gdis = $_POST['gdis'];
@@ -20,7 +19,6 @@ if (isset($_POST['submit'])) {
     $gimage = $_POST['gimage'];
     $imageone = $_POST['imageone'];
     $imagetwo = $_POST['imagetwo'];
-    $glink = $_POST['glink'];
     $gprice = $_POST['gprice'];
 
     // Check if the gadget already exists
@@ -33,16 +31,15 @@ if (isset($_POST['submit'])) {
         echo '<script> alert("Gadget already exists."); </script>';
     } else {
         if (
-            empty($g_id) || empty($type) || empty($pricerange) || empty($category) || empty($gname) || empty($gdis) || empty($gspecification) || empty($gimage) || empty($imageone) || empty($imagetwo) || empty($glink) || empty($gprice)
+            empty($g_id) || empty($type) || empty($category) || empty($gname) || empty($gdis) || empty($gspecification) || empty($gimage) || empty($imageone) || empty($imagetwo) || empty($gprice)
         ) {
             echo '<script> alert("Please fill all the fields."); window.location.href = "manage_product.php"; </script>';
         } else {
-            $sql = "INSERT INTO product (g_id, type, pricerange, category, gname,  gdis, gspecification, gimage, imageone, imagetwo, glink, gprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO product (g_id, type, category, gname,  gdis, gspecification, gimage, imageone, imagetwo, gprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([
                 $g_id,
                 $type,
-                $pricerange,
                 $category,
                 $gname,
                 $gdis,
@@ -50,7 +47,6 @@ if (isset($_POST['submit'])) {
                 $gimage,
                 $imageone,
                 $imagetwo,
-                $glink,
                 $gprice
             ]);
             echo '<script> alert("Gadget added successfully."); window.location.href = "manage_product.php"; </script>';
@@ -68,48 +64,21 @@ $stmt->execute();
 $value = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $g_id = isset($value['g_id']) ? $value['g_id'] : '';
-$gname = isset($value['gname']) ? $value['gname'] : '';
-$type = isset($value['type']) ? $value['type'] : '';
-$pricerange = isset($value['pricerange']) ? $value['pricerange'] : '';
 $category = isset($value['category']) ? $value['category'] : '';
-$gdis = isset($value['gdis']) ? $value['gdis'] : '';
-$gspecification = isset($value['gspecification']) ? $value['gspecification'] : '';
-$gimage = isset($value['gimage']) ? $value['gimage'] : '';
-$imageone = isset($value['imageone']) ? $value['imageone'] : '';
-$imagetwo = isset($value['imagetwo']) ? $value['imagetwo'] : '';
-$glink = isset($value['glink']) ? $value['glink'] : '';
 $gprice = isset($value['gprice']) ? $value['gprice'] : '';
 
 if (isset($_POST['update-submit'])) {
     $g_id = $_POST['g_id'];
-    $type = $_POST['type'];
-    $pricerange = $_POST['pricerange'];
     $category = $_POST['category'];
-    $gname = $_POST['gname'];
-    $gdis = $_POST['gdis'];
-    $gspecification = $_POST['gspecification'];
-    $gimage = $_POST['gimage'];
-    $imageone = $_POST['imageone'];
-    $imagetwo = $_POST['imagetwo'];
-    $glink = $_POST['glink'];
     $gprice = $_POST['gprice'];
 
-    if (empty($_POST['g_id']) || empty($_POST['type']) || empty($_POST['pricerange']) || empty($_POST['category']) || empty($_POST['gname']) || empty($_POST['gdis']) || empty($_POST['gspecification']) || empty($_POST['gimage']) || empty($_POST['imageone']) || empty($_POST['imagetwo']) || empty($_POST['glink']) || empty($_POST['gprice'])) {
+    if (empty($_POST['g_id']) || empty($_POST['category']) || empty($_POST['gprice'])) {
         echo '<script> alert("Please fill all the fields."); window.location.href = "manage_product.php"; </script>';
     } else {
-        $sql = "UPDATE product SET g_id=:g_id, type=:type, pricerange=:pricerange, category=:category, gname=:gname, gdis=:gdis, gspecification=:gspecification, gimage=:gimage, imageone=:imageone, imagetwo=:imagetwo, glink=:glink, gprice=:gprice WHERE g_id=:g_id";
+        $sql = "UPDATE product SET g_id=:g_id, category=:category, gprice=:gprice WHERE g_id=:g_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":g_id", $g_id);
-        $stmt->bindParam(":type", $type);
-        $stmt->bindParam(":pricerange", $pricerange);
         $stmt->bindParam(":category", $category);
-        $stmt->bindParam(":gname", $gname);
-        $stmt->bindParam(":gdis", $gdis);
-        $stmt->bindParam(":gspecification", $gspecification);
-        $stmt->bindParam(":gimage", $gimage);
-        $stmt->bindParam(":imageone", $imageone);
-        $stmt->bindParam(":imagetwo", $imagetwo);
-        $stmt->bindParam(":glink", $glink);
         $stmt->bindParam(":gprice", $gprice);
         $stmt->execute();
         echo '<script> alert("Gadget updated successfully."); window.location.href = "manage_product.php"; </script>';
@@ -134,7 +103,7 @@ if (isset($_POST['update-submit'])) {
 </head>
 
 <body>
-    <!-- <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
+    <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
         <div class="italic text-yellow-400 bg-black py-2 mx-10 px-3 rounded-2xl ml-10">TechWave</div>
         <nav class="my-10">
             <ul class="">
@@ -168,70 +137,70 @@ if (isset($_POST['update-submit'])) {
                 </li>
             </ul>
         </nav>
-    </header> -->
-    <main class="">
-        <div id="add-update">
-            <div class="gadget-details" id="gadget-details">
+    </header>
+    <main class="flex items-center justify-start h-full px-5 w-4/5 ml-auto">
+        <div id="add-update" class="flex item-center justify-between">
+            <div class=" bg-white rounded shadow-md p-6" id="gadget-details">
                 <form action="" method="POST" class="gadget-form">
                     <div class="input-container">
                         <div class="add">
-                            <h1 class="addtitle">ADD GADGET</h1>
-                            <input type="number" class="id" name="g_id" id="g_id" placeholder="Gadget ID" required>
-                            <div class="select-container">
-                                <select name="type" id="type">
+                            <h1 class="addtitle text-2xl font-bold mb-4">ADD GADGET</h1>
+                            <input type="number" class="id border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                                name="g_id" id="g_id" placeholder="Gadget ID" required>
+                            <div class="select-container mb-2">
+                                <select name="type" id="type" class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="select">select</option>
                                     <option value="laptop">laptop</option>
                                     <option value="phone">phone</option>
                                     <option value="accessories">Accessories</option>
                                 </select>
-                                <select name="category" id="category">
+                                <select name="category" id="category"
+                                    class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="select">select</option>
                                     <option value="bestbuy">best buy</option>
                                     <option value="deals">deals</option>
                                 </select>
-                                <select name="pricerange" id="pricerange">
-                                    <option value="1000-10000">1000-10000</option>
-                                    <option value="10000-50000">10000-50000</option>
-                                    <option value="50000-100000">50000-100000</option>
-                                    <option value="100000-150000">100000-150000</option>
-                                    <option value="150000-200000">150000-200000</option>
-                                </select>
                             </div>
-                            <input type="text" class="abbreviation" name="gname" id="gname" placeholder="Gadget Name"
-                                required>
-                            <input type="file" class="image" name="gimage" id="gimage" placeholder="Gadget Image URL"
-                                required>
-                            <textarea name="gdis" id="gdis" cols="60" rows="7"
-                                placeholder="Gadget Description"></textarea>
+                            <input type="text" class="abbreviation border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                                name="gname" id="gname" placeholder="Gadget Name" required>
+                            <input type="file" class="image border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                                name="gimage" id="gimage" placeholder="Gadget Image URL" required>
+                            <textarea name="gdis" id="gdis" cols="60" rows="7" placeholder="Gadget Description"
+                                class="border border-gray-300 rounded px-3 py-2 mb-2 w-full"></textarea>
                             <div class="box-content">
                                 <div class="con">
-                                    <input type="file" class="image" name="imageone" id="imageone"
-                                        placeholder="Gadget Image URL" required>
-                                    <input type="file" class="image" name="imagetwo" id="imagetwo"
-                                        placeholder="Gadget Image URL">
+                                    <input type="file"
+                                        class="image border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                                        name="imageone" id="imageone" placeholder="Gadget Image URL" required>
+                                    <input type="file"
+                                        class="image border border-gray-300 rounded px-3 py-2 mb-2 w-full"
+                                        name="imagetwo" id="imagetwo" placeholder="Gadget Image URL">
                                 </div>
                                 <div class="con">
-                                    <input type="text" class="link" name="glink" id="glink" placeholder="Gadget Link"
-                                        required>
-                                    <input type="number" class="price" name="gprice" id="gprice"
-                                        placeholder="Gadget Price" required>
+                                    <input type="number"
+                                        class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full" name="gprice"
+                                        id="gprice" placeholder="Gadget Price" required>
                                 </div>
                             </div>
                             <textarea name="gspecification" id="gspecification" cols="60" rows="7"
-                                placeholder="Gadget Specification" required></textarea>
+                                placeholder="Gadget Specification"
+                                class="border border-gray-300 rounded px-3 py-2 mb-2 w-full" required></textarea>
                             <center>
-                                <input type="submit" class="submit" name="submit" id="submit" value="Add">
+                                <input type="submit"
+                                    class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    name="submit" id="submit" value="Add">
                             </center>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="gadget-details" id="gadget-update">
+            <div class="gadget-details bg-white rounded shadow-md p-6" id="gadget-update">
                 <form action="" method="POST" class="manage-gadget-form">
                     <div class="input-container">
                         <div class="updatebox">
-                            <h1 class="updatetitle">UPDATE Gadgets</h1>
-                            <select class="id" name="g_id" id="g_id" onchange="this.form.submit()">
+                            <h1 class="updatetitle text-2xl font-bold mb-4">UPDATE Gadgets</h1>
+                            <select class="id border border-gray-300 rounded px-3 py-2 mb-2 w-full" name="g_id"
+                                id="g_id" onchange="this.form.submit()">
                                 <option value="">Gadget ID</option>
                                 <?php
                                 $stmt = $conn->prepare("SELECT g_id FROM product");
@@ -245,55 +214,30 @@ if (isset($_POST['update-submit'])) {
                                 ?>
                             </select>
                             <div class="select-container">
-                                <select name="type" id="type">
-                                    <option value="select">select</option>
-                                    <option value="laptop">laptop</option>
-                                    <option value="phone">phone</option>
-                                    <option value="accessories">Accessories</option>
-                                </select>
-                                <select name="category" id="category">
+                                <select name="category" id="category"
+                                    class="border border-gray-300 rounded px-3 py-2 mb-2 w-full">
                                     <option value="select">select</option>
                                     <option value="bestbuy">best buy</option>
                                     <option value="deals">deals</option>
                                 </select>
-                                <select name="pricerange" id="pricerange">
-                                    <option value="1000-10000">1000-10000</option>
-                                    <option value="10000-50000">10000-50000</option>
-                                    <option value="50000-100000">50000-100000</option>
-                                    <option value="100000-150000">100000-150000</option>
-                                    <option value="150000-200000">150000-200000</option>
-                                </select>
                             </div>
-                            <input type="text" class="gname" name="gname" id="gname" placeholder="Gadget Name"
-                                value="<?php echo $gname ?>" required>
-                            <input type="file" class="image" name="gimage" id="gimage" placeholder="Gadget Image URL"
-                                value="<?php echo $gimage ?>" required>
-                            <textarea name="gdis" id="gdis" cols="60" rows="7" placeholder="Gadget Description"
-                                required><?php echo $gdis ?></textarea>
                             <div class="box-content">
                                 <div class="con">
-                                    <input type="file" class="image" name="imageone" id="imageone"
-                                        placeholder="Gadget Image URL" value="<?php echo $imageone ?>" required><br>
-                                    <input type="file" class="image" name="imagetwo" id="imagetwo"
-                                        placeholder="Gadget Image URL" value="<?php echo $imagetwo ?>">
-                                </div>
-                                <div class="con">
-                                    <input type="text" class="link" name="glink" id="glink" placeholder="Gadget Link"
-                                        value="<?php echo $glink ?>" required><br>
-                                    <input type="number" class="price" name="gprice" id="gprice"
-                                        placeholder="Gadget Price" value="<?php echo $gprice ?>" required>
+                                    <input type="number"
+                                        class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full" name="gprice"
+                                        id="gprice" placeholder="Gadget Price" value="<?php echo $gprice ?>" required>
                                 </div>
                             </div>
-                            <textarea name="gspecification" id="gspecification" cols="60" rows="7"
-                                placeholder="Gadget Specification" required><?php echo $gspecification ?></textarea>
-                            <center>
-                                <input type="submit" class="submit" name="update-submit" id="update-submit"
-                                    value="Update">
-                            </center>
+                            <div class="text-center">
+                                <input type="submit"
+                                    class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    name="update-submit" id="update-submit" value="Update">
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
+
 
         </div>
     </main>

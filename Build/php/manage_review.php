@@ -1,11 +1,29 @@
 <?php
-// session_start();
 include 'dbconn.php';
 
-// if (!isset($_SESSION['adminname'])) {
-//     header('location: home.php');
-// }
+// Check if the form is submitted for updating feedback status
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['feedback_id']) && isset($_POST['status'])) {
+    // Sanitize input data to prevent SQL injection
+    $feedback_id = htmlspecialchars($_POST['feedback_id']);
+    $status = htmlspecialchars($_POST['status']);
 
+    // Update the status of the feedback in the database
+    $updateQuery = "UPDATE feedback SET status = :status WHERE feedback_id = :feedback_id";
+    $stmt = $conn->prepare($updateQuery);
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':feedback_id', $feedback_id);
+    $stmt->execute();
+
+    exit; // End the script after updating the status
+}
+
+// Fetch and display user feedback
+$query = "SELECT * FROM feedback";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$total = count($data);
+$count = 1;
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +32,7 @@ include 'dbconn.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>User Feedback</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -24,7 +42,7 @@ include 'dbconn.php';
 </head>
 
 <body>
-    <!-- <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
+    <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
         <div class="italic text-yellow-400 bg-black py-2 mx-10 px-3 rounded-2xl ml-10">TechWave</div>
         <nav class="my-10">
             <ul class="">
@@ -58,66 +76,72 @@ include 'dbconn.php';
                 </li>
             </ul>
         </nav>
-    </header> -->
-    <main class="">
-        <div class="data">
-            <h1>user feedback</h1>
-            <?php
-            $query = "SELECT * FROM feedback";
-            $stmt = $conn->prepare($query);
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $total = count($data);
-            $count = 1;
-            if ($total != 0) {
-                ?>
-                <table border="1">
-                    <tr>
-                        <th>S.N.</th>
-                        <th>User Name</th>
-                        <th>Feedback</th>
-                        <th>Rating</th>
-                        <th>Gadget id</th>
-                        <th>Operation</th>
-                        <th>Update Status</th>
-                        <th>Status</th>
-                    </tr>
-                    <?php
-                    foreach ($data as $result) {
-                        echo "
-                        <tr>
-                           <td>" . $count++ . "</td>
-                           <td>" . $result['uname'] . "</td>
-                           <td>" . $result['feedback'] . "</td>
-                           <td>" . $result['rating'] . "</td>
-                           <td>" . $result['g_id'] . "</td>
-                           <td><a href='delete/review.php?id=" . $result['feedback_id'] . "'><input type='submit' value='delete' class='delete' name='delete-user'></a>
-                           </td>
-
-                        
-                        <td>
-                        <select class='form-select' name='status' onchange='updateStatus(this, " . $result['feedback_id'] . ")'>
-                            <option value='' disabled selected>Update</option>
-                            <option value='Approved'>Approve</option>
-                        </select>
-                    </td>
-                    <td id='status-" . $result['feedback_id'] . "'>" . $result['status'] . "</td>
-                    </tr>
-                     ";
-                    }
-                    ?>
-                </table>
-                <?php
-            }
-            ?>
+    </header>
+    <main class="bg-gray-100 min-h-screen py-8 px-4 ml-auto w-4/5">
+        <div class="max-w-5xl mx-auto">
+            <div class="data">
+                <h1 class="text-3xl font-bold mb-4">User Feedback</h1>
+                <?php if ($total > 0): ?>
+                    <table class="w-full border-collapse border border-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2">S.N.</th>
+                                <th class="px-4 py-2">User Name</th>
+                                <th class="px-4 py-2">Feedback</th>
+                                <th class="px-4 py-2">Rating</th>
+                                <th class="px-4 py-2">Gadget ID</th>
+                                <th class="px-4 py-2">Operation</th>
+                                <th class="px-4 py-2">Update Status</th>
+                                <th class="px-4 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $result): ?>
+                                <tr>
+                                    <td class="px-4 py-2">
+                                        <?php echo $count++; ?>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <?php echo $result['uname']; ?>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <?php echo $result['feedback']; ?>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <?php echo $result['rating']; ?>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <?php echo $result['g_id']; ?>
+                                    </td>
+                                    <td class="px-4 py-2"><a href='delete/review.php?id=<?php echo $result['feedback_id']; ?>'
+                                            class="text-blue-500 hover:text-blue-700">Delete</a></td>
+                                    <td class="px-4 py-2">
+                                        <select class='form-select w-full max-w-xs' name='status'
+                                            onchange='updateStatus(this, "<?php echo $result['feedback_id']; ?>")'>
+                                            <option value='' disabled selected>Update</option>
+                                            <option value='Approved'>Approve</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-2" id='status-<?php echo $result['feedback_id']; ?>'>
+                                        <?php echo $result['status']; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p class="text-gray-500">No feedback available.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </main>
+
 
     <script>
         function updateStatus(selectElement, feedback_id) {
             var status = selectElement.value;
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'updatestatus.php', true);
+            xhr.open('POST', '<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             xhr.onreadystatechange = function () {
@@ -131,7 +155,6 @@ include 'dbconn.php';
             xhr.send(data);
         }
     </script>
-    </main>
 </body>
 
 </html>

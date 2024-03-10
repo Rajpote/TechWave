@@ -1,3 +1,14 @@
+<?php
+session_start();
+include 'dbconn.php';
+require_once 'rating.php';
+if (!isset($_SESSION['uname'])) {
+    header('location: home.php');
+    exit(); // Ensure that the script stops here if the user is not logged in.
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,26 +29,51 @@
         <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
         <nav class="">
             <ul class="flex items-center text-black gap-5">
-                <li><a href="index.php
+                <li><a href="home.php
                 " class="hover:text-yellow-500">Home</a></li>
                 <li><a href="product.php
                 " class="hover:text-yellow-500">Product</a></li>
-                <li><a href="home.php
+                <li><a href="contact.php
                 " class="hover:text-yellow-500">Contact</a></li>
             </ul>
         </nav>
         <div>
-            <input type="text" name="" id="" class="rounded-xl" />
+            <form action="search.php" method="post" class="flex items-center relative">
+                <input type="text" name="search"
+                    class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Search . . . " id="search" />
+                <button type="submit"
+                    class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
         </div>
         <div class="flex items-center justify-center gap-6">
             <div>
                 <a href="" class="hover:text-blue-800 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
             </div>
-            <div class="gap-2 inline-block">
-                <a href="signup.php"
-                    class="font-semibold hover:bg-yellow-200 py-1 bg-slate-100 mx-0 px-4 rounded-md">Sign up</a>
-                <a href="login.php"
-                    class="font-semibold hover:bg-slate-100 py-1 bg-yellow-200 mx-0 px-4 rounded-md">Login</a>
+            <div>
+                <button id="popup-button"><i
+                        class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
+                <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+                <div id="popup-container"
+                    class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+                    <div class="relative">
+                        <button id="close-popup"
+                            class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
+                        <div id="username" class="container mt-6">
+                            <?php echo $_SESSION['uname'] ?>
+
+                            <div class="update-user">
+                                <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                            </div>
+                            <div class="logout">
+                                <a href="logout.php">logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
         <button class="hidden sm:text-slate-900"></button>
@@ -112,6 +148,7 @@
             </ul>
         </div>
     </footer>
+    <script src="../javsscript/user.js"></script>
 
 </body>
 
