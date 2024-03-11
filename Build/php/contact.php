@@ -25,58 +25,59 @@ if (!isset($_SESSION['uname'])) {
 </head>
 
 <body>
-    <header class="bg-white-400 py-3 px-20 mb-10 flex items-center justify-between sticky top-0 z-10 bg-slate-200">
-        <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
-        <nav class="">
+    <header class="bg-white px-20 py-3 flex items-center justify-between sticky top-0 z-10 shadow-md">
+        <a href="home.php" class="italic text-yellow-400 px-3 rounded-2xl">
+            <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+        </a>
+        <nav>
             <ul class="flex items-center text-black gap-5">
-                <li><a href="home.php
-                " class="hover:text-yellow-500">Home</a></li>
-                <li><a href="product.php
-                " class="hover:text-yellow-500">Product</a></li>
-                <li><a href="contact.php
-                " class="hover:text-yellow-500">Contact</a></li>
+                <li><a href="home.php" class="hover:text-yellow-500">Home</a></li>
+                <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
+                <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
             </ul>
         </nav>
-        <div>
-            <form action="search.php" method="post" class="flex items-center relative">
+        <!-- Search Form -->
+        <div class="relative">
+            <form action="search.php" method="post" class="flex items-center">
                 <input type="text" name="search"
-                    class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                     placeholder="Search . . . " id="search" />
                 <button type="submit"
-                    class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg ml-2">
                     <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
         </div>
         <div class="flex items-center justify-center gap-6">
             <div>
-                <a href="" class="hover:text-blue-800 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
             </div>
             <div>
-                <button id="popup-button"><i
-                        class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
-                <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+                <button id="popup-button"
+                    class="text-center rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black focus:outline-none">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+                <div id="overlay" class="hidden fixed top-0 left-0 w-full h-full bg-transparent z-10"></div>
                 <div id="popup-container"
-                    class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+                    class="hidden fixed top-20 right--2 transform -translate-x-1/2 bg-white p-4 shadow-lg z-50 rounded-lg">
                     <div class="relative">
                         <button id="close-popup"
-                            class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
-                        <div id="username" class="container mt-6">
+                            class="text-3xl hover:text-red-600 absolute top-[-2rem] right-0">&times;</button>
+                        <div id="username" class="mt-6">
                             <?php echo $_SESSION['uname'] ?>
-
-                            <div class="update-user">
-                                <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                            <div class="update-user mt-4">
+                                <a href="update_user.php?id=<?php echo $uid; ?>"
+                                    class="text-blue-500 hover:underline">Update</a>
                             </div>
-                            <div class="logout">
-                                <a href="logout.php">logout</a>
+                            <div class="logout mt-2">
+                                <a href="logout.php" class="text-red-500 hover:underline">Logout</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
+
             </div>
         </div>
-        <button class="hidden sm:text-slate-900"></button>
     </header>
     <main class="px-10">
         <article id="About" class=" mx-10 my-4 space-y-4 md:space-x-4">
@@ -121,33 +122,38 @@ if (!isset($_SESSION['uname'])) {
         </article>
 
     </main>
-    <footer class="bg-yellow-200 px-10 mt-10">
-        <div class="italic text-yellow-400 bg-black py-2 px-3 mx-10 rounded-2xl w-[6%]">TechWave</div>
-        <div
-            class="flex items-start justify-between text-slate-800 bg-yellow-200 gap-2 px-14 py-4 mt-4 relative bottom-0">
-            <ul>
-                <li>ph:9800000000</li>
-                <li><a href="">rrajpote666@gmail.com</a></li>
+    <footer class="bg-yellow-200 px-20 mt-10">
+        <a href="home.php" class="italic text-yellow-400 px-4 rounded-2xl">
+            <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-12">
+        </a>
+        <div class="flex justify-between text-slate-800 gap-4 px-10 py-4 ">
+            <ul class="flex flex-col gap-2">
+                <li>ph: 9800000000</li>
+                <li><a href="mailto:rrajpote666@gmail.com"
+                        class="text-slate-800 hover:text-blue-500">rrajpote666@gmail.com</a></li>
                 <li>sjfnnfn</li>
             </ul>
-            <ul>
-                <li><a href="">About Us</a></li>
-                <li><a href="">Term & Condition</a></li>
-                <li><a href="">Support</a></li>
+            <ul class="flex flex-col gap-2">
+                <li><a href="#" class="text-slate-800 hover:text-blue-500">About Us</a></li>
+                <li><a href="#" class="text-slate-800 hover:text-blue-500">Term & Condition</a></li>
+                <li><a href="#" class="text-slate-800 hover:text-blue-500">Support</a></li>
             </ul>
             <ul class="flex gap-3 justify-center items-center">
                 <li>
-                    <a href=""><i class="fa-brands fa-square-facebook text-2xl hover:text-blue-500"></i></a>
+                    <a href="#" class="text-slate-800 hover:text-blue-500"><i
+                            class="fab fa-facebook-square text-2xl"></i></a>
                 </li>
                 <li>
-                    <a href=""><i class="fa-brands fa-youtube text-2xl hover:text-red-500"></i></a>
+                    <a href="#" class="text-slate-800 hover:text-red-500"><i class="fab fa-youtube text-2xl"></i></a>
                 </li>
                 <li>
-                    <a href=""><i class="fa-brands fa-square-instagram text-2xl hover:text-purple-500"></i></a>
+                    <a href="#" class="text-slate-800 hover:text-purple-500"><i
+                            class="fab fa-instagram-square text-2xl"></i></a>
                 </li>
             </ul>
         </div>
     </footer>
+
     <script src="../javsscript/user.js"></script>
 
 </body>

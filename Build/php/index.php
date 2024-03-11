@@ -20,29 +20,43 @@ require_once 'rating.php';
 </head>
 
 <body>
-   <header class="bg-white-400 py-3 px-20 mb-10 flex items-center justify-between sticky top-0 z-10 bg-slate-200">
-      <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
-      <nav class="">
+   <header class="bg-white px-20 mb-10 py-3 flex items-center justify-between sticky top-0 z-10 shadow-md">
+      <a href="home.php" class="italic text-yellow-400 px-3 rounded-2xl">
+         <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+      </a>
+      <nav>
          <ul class="flex items-center text-black gap-5">
             <li><a href="index.php" class="hover:text-yellow-500">Home</a></li>
-            <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
-            <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
+            <li><a href="index.php" class="hover:text-yellow-500">Product</a></li>
+            <li><a href="index.php" class="hover:text-yellow-500">Contact</a></li>
          </ul>
       </nav>
-      <div>
-         <input type="text" name="" id="" class="rounded-xl" />
+      <div class="relative">
+         <form action="" method="post" class="flex items-center">
+            <input type="text" name="search"
+               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+               placeholder="Search . . . " id="search" />
+            <button
+               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg ml-2">
+               <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+            </button>
+         </form>
       </div>
       <div class="flex items-center justify-center gap-6">
          <div>
-            <a href="" class="hover:text-blue-800 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
          <div class="gap-2 inline-block">
-            <a href="signup.php" class="font-semibold hover:bg-yellow-200 py-1 bg-slate-100 mx-0 px-4 rounded-md">Sign
-               up</a>
+            <a href="signup.php"
+               class="font-semibold hover:bg-yellow-200 py-2 px-4 rounded-md text-black bg-white mx-0">Sign up</a>
             <a href="login.php"
-               class="font-semibold hover:bg-slate-100 py-1 bg-yellow-200 mx-0 px-4 rounded-md">Login</a>
+               class="font-semibold hover:bg-white py-2 px-4 rounded-md text-slate-500 bg-yellow-200 mx-0">Login</a>
+
          </div>
+
       </div>
+
+
       <button class="hidden sm:text-slate-900"></button>
    </header>
    <main class="mt-[-2.5rem] px-20">
@@ -169,31 +183,35 @@ require_once 'rating.php';
    </main>
    <footer class="bg-yellow-200 px-10 mt-10">
       <div class="italic text-yellow-400 bg-black py-2 px-3 mx-10 rounded-2xl w-[6%]">TechWave</div>
-      <div
-         class="flex items-start justify-between text-slate-800 bg-yellow-200 gap-2 px-14 py-4 mt-4 relative bottom-0">
-         <ul>
-            <li>ph:9800000000</li>
-            <li><a href="">rrajpote666@gmail.com</a></li>
+      <div class="flex justify-between text-slate-800 gap-4 px-14 py-4 mt-4">
+         <ul class="flex flex-col gap-2">
+            <li>ph: 9800000000</li>
+            <li><a href="mailto:rrajpote666@gmail.com"
+                  class="text-slate-800 hover:text-blue-500">rrajpote666@gmail.com</a></li>
             <li>sjfnnfn</li>
          </ul>
-         <ul>
-            <li><a href="">About Us</a></li>
-            <li><a href="">Term & Condition</a></li>
-            <li><a href="">Support</a></li>
+         <ul class="flex flex-col gap-2">
+            <li><a href="#" class="text-slate-800 hover:text-blue-500">About Us</a></li>
+            <li><a href="#" class="text-slate-800 hover:text-blue-500">Term & Condition</a></li>
+            <li><a href="#" class="text-slate-800 hover:text-blue-500">Support</a></li>
          </ul>
          <ul class="flex gap-3 justify-center items-center">
             <li>
-               <a href=""><i class="fa-brands fa-square-facebook text-2xl hover:text-blue-500"></i></a>
+               <a href="#" class="text-slate-800 hover:text-blue-500"><i
+                     class="fab fa-facebook-square text-2xl"></i></a>
             </li>
             <li>
-               <a href=""><i class="fa-brands fa-youtube text-2xl hover:text-red-500"></i></a>
+               <a href="#" class="text-slate-800 hover:text-blue-500"><i class="fab fa-youtube text-2xl"></i></a>
             </li>
             <li>
-               <a href=""><i class="fa-brands fa-square-instagram text-2xl hover:text-purple-500"></i></a>
+               <a href="#" class="text-slate-800 hover:text-blue-500"><i
+                     class="fab fa-instagram-square text-2xl"></i></a>
             </li>
          </ul>
       </div>
    </footer>
+
+
    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
    <script src="../javsscript/script.js"></script>
 </body>

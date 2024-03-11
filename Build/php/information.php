@@ -168,22 +168,25 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
    if (count($result) > 0) {
       foreach ($result as $row) {
          ?>
-         <header class="bg-white-400 px-20 py-3 flex items-center justify-between fixed top-0 z-10 bg-slate-200 w-full">
-            <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
-            <nav class="">
+         <header class="bg-white px-20 py-3 flex items-center justify-between sticky top-0 z-10 shadow-md">
+            <a href="home.php" class="italic text-yellow-400 px-3 rounded-2xl">
+               <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+            </a>
+            <nav>
                <ul class="flex items-center text-black gap-5">
                   <li><a href="home.php" class="hover:text-yellow-500">Home</a></li>
                   <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
                   <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
                </ul>
             </nav>
-            <div>
-               <form action="search.php" method="post" class="flex items-center relative">
+            <!-- Search Form -->
+            <div class="relative">
+               <form action="search.php" method="post" class="flex items-center">
                   <input type="text" name="search"
-                     class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                     class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                      placeholder="Search . . . " id="search" />
                   <button type="submit"
-                     class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg ml-2">
                      <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
                   </button>
                </form>
@@ -193,30 +196,31 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
                </div>
                <div>
-                  <button id="popup-button"><i
-                        class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
-                  <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+                  <button id="popup-button"
+                     class="text-center rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black focus:outline-none">
+                     <i class="fa-solid fa-user"></i>
+                  </button>
+                  <div id="overlay" class="hidden fixed top-0 left-0 w-full h-full bg-transparent z-10"></div>
                   <div id="popup-container"
-                     class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+                     class="hidden fixed top-20 right--2 transform -translate-x-1/2 bg-white p-4 shadow-lg z-50 rounded-lg">
                      <div class="relative">
                         <button id="close-popup"
-                           class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
-                        <div id="username" class="container mt-6">
+                           class="text-3xl hover:text-red-600 absolute top-[-2rem] right-0">&times;</button>
+                        <div id="username" class="mt-6">
                            <?php echo $_SESSION['uname'] ?>
-
-                           <div class="update-user">
-                              <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                           <div class="update-user mt-4">
+                              <a href="update_user.php?id=<?php echo $uid; ?>"
+                                 class="text-blue-500 hover:underline">Update</a>
                            </div>
-                           <div class="logout">
-                              <a href="logout.php">logout</a>
+                           <div class="logout mt-2">
+                              <a href="logout.php" class="text-red-500 hover:underline">Logout</a>
                            </div>
                         </div>
-
                      </div>
                   </div>
+
                </div>
             </div>
-            <button class="hidden sm:text-slate-900"></button>
          </header>
          <main class="mx-10 mt-20">
             <article class="flex items-center justify-center px-10 gap-6 mt-[-10px]">
@@ -262,9 +266,9 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                            </div>
                         </div>
                         <div class="py-5 w-3/4">
-                        <?php
-                              echo "<p class='gprice'>{$row['gdis']} </p>";
-                              ?>
+                           <?php
+                           echo "<p class='gprice'>{$row['gdis']} </p>";
+                           ?>
                         </div>
                         <form action="" method="POST" class="flex items-center px-4 gap-5">
                            <div class="cart-item">
