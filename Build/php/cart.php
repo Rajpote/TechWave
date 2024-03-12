@@ -17,34 +17,36 @@ $stmt->execute();
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $itemCount = $result['item_count'];
 
-if (isset($_POST['delete']) && isset($_POST['legoIdToDelete'])) {
-    $legoId = $_POST['legoIdToDelete'];
+if (isset($_POST['delete-btn']) && isset($_POST['delete_product_id'])) {
+    $g_id = $_POST['delete_product_id'];
 
-    $stmt = $conn->prepare("DELETE FROM cart_data WHERE userId = :userId AND legoId = :legoId");
-    $stmt->bindParam(':userId', $id);
-    $stmt->bindParam(':legoId', $legoId);
+    $stmt = $conn->prepare("DELETE FROM cart WHERE id = :id AND g_id = :g_id");
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':g_id', $g_id);
     $stmt->execute();
 
     header('location: cart.php');
     exit();
 }
+
+
 if (isset($_POST['update-cart'])) {
     if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
         $quantities = $_POST['quantity'];
 
-        foreach ($quantities as $legoId => $newQuantity) {
-            $legoId = intval($legoId);
+        foreach ($quantities as $g_id => $newQuantity) {
+            $g_id = intval($g_id);
             $newQuantity = intval($newQuantity);
 
             if ($newQuantity <= 0) {
-                $stmt = $conn->prepare("DELETE FROM cart_data WHERE userId = :userId AND legoId = :legoId");
-                $stmt->bindParam(':userId', $id);
-                $stmt->bindParam(':legoId', $legoId);
+                $stmt = $conn->prepare("DELETE FROM cart WHERE id = :id AND g_id = :g_id");
+                $stmt->bindParam(':id', $id);
+                $stmt->bindParam(':g_id', $g_id);
                 $stmt->execute();
             } else {
-                $stmt = $conn->prepare("UPDATE cart_data SET quantity = :quantity WHERE userId = :userId AND legoId = :legoId");
-                $stmt->bindParam(':userId', $id);
-                $stmt->bindParam(':legoId', $legoId);
+                $stmt = $conn->prepare("UPDATE cart SET quantity = :quantity WHERE id = :id AND g_id = :g_id");
+                $stmt->bindParam(':id', $id);
+                $stmt->bindParam(':g_id', $g_id);
                 $stmt->bindParam(':quantity', $newQuantity);
                 $stmt->execute();
             }
@@ -182,10 +184,18 @@ if (isset($_POST['update-cart'])) {
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . $count . '</td>';
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . $name . '</td>';
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . '$' . $price . '</td>';
-                                        echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><input type="number" class="form-control text-center p-0" name="quantity[' . $g_id . ']" value="' . $quantity . '"></td>';
+                                        echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><input type="number" class="form-control" name="quantity[' . $g_id . ']" value="' . $quantity . '"></td>';
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . '$' . $subTotal . '</td>';
-                                        echo '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"><i class="fa-solid fa-trash text-red-400 cursor-pointer" id="showDeleteConfirmation" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" data-lego-id="' . $g_id . '" onclick="setg_idToDelete(this.getAttribute(\'data-lego-id\'))"></i></td>';
+                                        echo '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <form action="" method="POST">
+                                                <input type="hidden" name="delete_product_id" value="' . $g_id . '">
+                                                <button type="submit" name="delete-btn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>';
                                         echo '</tr>';
+                                        ;
 
                                         $count++;
                                     }

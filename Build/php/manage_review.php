@@ -64,8 +64,9 @@ $count = 1;
                         class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">Cart</a>
                 </li>
                 <li>
-                    <a href="manage_product.php"
-                        class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">Product</a>
+                    <a href="product_info.php"
+                        class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">Product
+                        info</a>
                 </li>
                 <li>
                     <a href="manage_user.php"

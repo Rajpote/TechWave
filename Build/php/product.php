@@ -9,91 +9,35 @@ if (!isset($_SESSION['uname'])) {
 
 use PSpell\Dictionary;
 
-// Determine the current page number
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+// Fetch categories from the database
+$sql_categories = "SELECT DISTINCT category FROM product";
+$stmt_categories = $conn->query($sql_categories);
+$categories = $stmt_categories->fetchAll(PDO::FETCH_COLUMN);
 
-// Calculate the offset based on the page number and limit
-$limit = 8;
-$offset = ($page - 1) * $limit;
+// Fetch brands from the database
+$sql_brands = "SELECT DISTINCT `type` FROM product";
+$stmt_brands = $conn->query($sql_brands);
+$types = $stmt_brands->fetchAll(PDO::FETCH_COLUMN);
 
-$g_id;
-$i = 0;
-$searchValue;
-@$count = $_GET['count'];
+// Initialize variables to store selected category and brand
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+$type = isset($_GET['type']) ? $_GET['type'] : '';
 
-do {
-   @$g_id = $_GET[$i];
+// Build the SQL query based on selected filters
+$sql = "SELECT * FROM product";
 
-   if ($g_id != null) {
-      $stmt = $conn->prepare("SELECT * FROM product WHERE g_id = :g_id LIMIT $limit OFFSET $offset");
-      $stmt->bindParam(':g_id', $g_id);
-
-      $stmt->execute();
-      $value[$i] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      $searchValue = true;
-   } else {
-      $searchValue = false;
-   }
-   $i++;
-} while ($i < $count);
-
-
-/// Handle Filter Submission
-if (isset($_GET['filter-submit'])) {
-   // Retrieve the submitted filter values
-   $category = isset($_GET['category']) ? $_GET['category'] : '';
-   $max_price = isset($_GET['max_price']) ? $_GET['max_price'] : '';
-   $type = isset($_GET['type']) ? $_GET['type'] : '';
-
-   // Construct the base SQL query
-   $sql = "SELECT product.*, AVG(feedback.rating) AS average_rating
-           FROM product
-           LEFT JOIN feedback ON product.g_id = feedback.g_id";
-
-   // Initialize an array to store WHERE clause conditions
-   $whereClause = [];
-
-   // Add conditions to the WHERE clause based on submitted filter values
-   if (!empty($category)) {
-      $whereClause[] = "category = :category";
-   }
-   if (!empty($max_price)) {
-      $whereClause[] = "gprice <= :max_price";
-   }
-   if (!empty($type)) {
-      $whereClause[] = "type = :type";
-   }
-
-   // If there are any conditions in the WHERE clause, append them to the SQL query
-   if (!empty($whereClause)) {
-      $sql .= " WHERE " . implode(" AND ", $whereClause);
-   }
-
-   // Group by product ID
-   $sql .= " GROUP BY product.g_id";
-
-   // Modify the SQL query to include the limit and offset
-   $sql .= " LIMIT $limit OFFSET $offset";
-
-   // Prepare the SQL statement
-   $stmt = $conn->prepare($sql);
-
-   // Bind parameters if necessary
-   if (!empty($category)) {
-      $stmt->bindParam(':category', $category);
-   }
-   if (!empty($max_price)) {
-      $stmt->bindParam(':max_price', $max_price);
-   }
-   if (!empty($type)) {
-      $stmt->bindParam(':type', $type);
-   }
-
-   // Execute the query
-   $stmt->execute();
-   $value = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (!empty($category) && !empty($type)) {
+   // Filter by both category and type
+   $sql .= " WHERE category = '$category' AND type = '$type'";
+} elseif (!empty($category)) {
+   // Filter only by category
+   $sql .= " WHERE category = '$category'";
+} elseif (!empty($type)) {
+   // Filter only by type
+   $sql .= " WHERE type = '$type'";
 }
 
+$stmt = $conn->query($sql);
 ?>
 
 
@@ -201,45 +145,45 @@ if (isset($_GET['filter-submit'])) {
          </div>
       </div>
    </header>
+
+   <div class="filter-container my-4">
+      <form action="" method="GET">
+         <select name="category" id="category">
+            <option value="">All Categories</option>
+            <?php foreach ($categories as $categoryOption): ?>
+               <option value="<?php echo $categoryOption; ?>" <?php echo ($category == $categoryOption) ? 'selected' : ''; ?>>
+                  <?php echo $categoryOption; ?>
+               </option>
+            <?php endforeach; ?>
+         </select>
+         <select name="type" id="type">
+            <option value="">All Brands</option>
+            <?php foreach ($types as $brandOption): ?>
+               <option value="<?php echo $brandOption; ?>" <?php echo ($type == $brandOption) ? 'selected' : ''; ?>>
+                  <?php echo $brandOption; ?>
+               </option>
+            <?php endforeach; ?>
+         </select>
+         <button type="submit">Apply Filters</button>
+      </form>
+   </div>
+
    <main class="bg-slate-300 w-full">
       <article class="bg-slate-300 w-full px-16 flex items-start justify-center">
          <article class="w-4/5">
             <section>
                <div class=" p-5 flex item-center gap-4 flex-wrap ">
                   <?php
-                  $sql = "SELECT product.*, AVG(feedback.rating) AS average_rating
-                  FROM product
-                  LEFT JOIN feedback ON product.g_id = feedback.g_id";
-                  if (isset($_GET['type'])) {
-                     $type = $_GET['type'];
-                     $sql .= " WHERE product.type = '$type'";
-                  }
-                  $sql .= " GROUP BY product.g_id";
-
-
-                  // Get the total count of rows without limit and offset
-                  $totalRows = $conn->query($sql)->rowCount();
-
-                  // Calculate the total number of pages
-                  $totalPages = ceil($totalRows / $limit);
-
-                  // Modify the SQL query to include the limit and offset
-                  $sql .= " LIMIT $limit OFFSET $offset";
-
-                  $stmt = $conn->query($sql);
-
                   if ($stmt->rowCount() > 0) {
                      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         $gadgetID = $row['g_id']; // Fetch the gadget ID from the row
                         $gadget_id = $row['g_id'];
-                        $average_rating = $row['average_rating'];
 
                         echo '<a href="information.php?g_id=' . $gadget_id . '" class="g-item w-[23.5%] h-1/4 inline-block border rounded-lg overflow-hidden shadow-md">';
                         echo '<div class="w-full bg-slate-100 p-3 hover:bg-white">';
 
                         if (isset($row['gimage']) && !empty($row['gimage'])) {
                            echo "<img class='h-60 w-full object-fill' src='../img/{$row['gimage']}' alt='Gadget Image'>";
-
                         }
 
                         echo '<section class="gadget-section mt-2 text-center">';
@@ -268,68 +212,11 @@ if (isset($_GET['filter-submit'])) {
             </div>
             </section>
          </article>
-
-
-         <article class="bg-slate-600 w-1/6">
-            <div id="filter-section" class="mr-10">
-               <h1 class="text-xl font-bold mb-4">Filter Gadgets</h1>
-               <form action="" method="GET" class="filter-form">
-                  <div class="input-container">
-                     <div class="filterbox">
-                        <div class="select-container mb-2">
-                           <select name="category" id="category-filter"
-                              class="border border-gray-300 rounded px-3 py-2 w-full mb-2">
-                              <option value="">All Categories</option>
-                              <option value="bestbuy">Best Buy</option>
-                              <option value="deals">Deals</option>
-                              <!-- Add more options as needed -->
-                           </select>
-                        </div>
-                        <input type="number" class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full"
-                           name="max_price" placeholder="Max Price">
-
-                        <!-- New select field for type -->
-                        <select name="type" id="type-filter"
-                           class="border border-gray-300 rounded px-3 py-2 w-full mb-2">
-                           <option value="">All Brands</option>
-                           <option value="Apple">Apple</option>
-                           <option value="Samsung">Samsung</option>
-                           <option value="Xiaomi">Xiaomi</option>
-                           <option value="Realme">Realme</option>
-                           <option value="Oneplus">Oneplus</option>
-                           <!-- Add more options as needed -->
-                        </select>
-
-                        <button type="submit"
-                           class="submit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                           name="filter-submit" id="filter-submit">Filter</button>
-                     </div>
-                  </div>
-               </form>
-            </div>
-         </article>
       </article>
-      <center>
-         <div class="pagination">
-            <?php
-            // Previous page link
-            if ($page > 1) {
-               echo '<a class="page-link" href="?page=' . ($page - 1) . '">&laquo; Previous</a>';
-            }
-
-            for ($i = 1; $i <= $totalPages; $i++) {
-               $activeClass = ($i === $page) ? "active" : "";
-               echo '<a class="page-link ' . $activeClass . '" href="?page=' . $i . '">' . $i . '</a>';
-            }
-
-            // Next page link
-            if ($page < $totalPages) {
-               echo '<a class="page-link" href="?page=' . ($page + 1) . '">Next &raquo;</a>';
-            }
-            ?>
-         </div>
-      </center>
    </main>
+
+
+
 
    <footer class="bg-yellow-200 px-20">
       <a href="home.php" class="italic text-yellow-400 px-4 rounded-2xl">
@@ -362,6 +249,58 @@ if (isset($_GET['filter-submit'])) {
          </ul>
       </div>
    </footer>
+
+
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+         const form = document.querySelector('.filter-container form');
+         const productList = document.querySelector('.p-5');
+
+         form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get selected filter values
+            const formData = new FormData(form);
+
+            // Send AJAX request
+            fetch('filter_products.php', {
+               method: 'POST',
+               body: formData
+            })
+               .then(response => response.json()) // Parse JSON response
+               .then(data => {
+                  // Update product listing with filtered results
+                  let productsHTML = '';
+                  if (data.length === 0) {
+                     productsHTML = '<p>No products found.</p>';
+                  } else {
+                     data.forEach(product => {
+                        productsHTML += `
+                        <a href="information.php?g_id=${product.g_id}" class="g-item w-[23.5%] h-1/4 inline-block border rounded-lg overflow-hidden shadow-md">
+                            <div class="w-full bg-slate-100 p-3 hover:bg-white">
+                                <img class="h-60 w-full object-fill" src="../img/${product.gimage}" alt="Gadget Image">
+                                <section class="gadget-section mt-2 text-center">
+                                    <div class="text-slate-700 font-semibold">${product.gname}</div>
+                                    <div class="text-purple-500">Rs: ${product.gprice}</div>
+                                    <div class="text-purple-500">Rs: ${product.displayRating($conn, $gadgetID)
+                           // }</div >
+                                </section >
+                            </div >
+                        </a >
+                    `;
+                     });
+                  }
+                  productList.innerHTML = productsHTML;
+               })
+               .catch(error => {
+                  console.error('Error:', error);
+               });
+         });
+      });
+
+   </script>
+
+
 
    <script src="../javsscript/user.js"></script>
 </body>
