@@ -206,7 +206,7 @@ $stmt = $conn->query($sql);
                   <?php
                      }
                   } else {
-                     echo "No gadgets found.";
+                     echo '<p class="text-2xl text-red-500 font-bold text-center h-full w-full">No Gadget Found</p>';
                   }
                   ?>
             </div>
@@ -214,9 +214,6 @@ $stmt = $conn->query($sql);
          </article>
       </article>
    </main>
-
-
-
 
    <footer class="bg-yellow-200 px-20">
       <a href="home.php" class="italic text-yellow-400 px-4 rounded-2xl">
@@ -272,7 +269,7 @@ $stmt = $conn->query($sql);
                   // Update product listing with filtered results
                   let productsHTML = '';
                   if (data.length === 0) {
-                     productsHTML = '<p>No products found.</p>';
+                     productsHTML = '<p class="text-2xl text-red-500 font-bold text-center">No products found.</p>';
                   } else {
                      data.forEach(product => {
                         productsHTML += `
@@ -282,11 +279,11 @@ $stmt = $conn->query($sql);
                                 <section class="gadget-section mt-2 text-center">
                                     <div class="text-slate-700 font-semibold">${product.gname}</div>
                                     <div class="text-purple-500">Rs: ${product.gprice}</div>
-                                    <div class="text-purple-500">Rs: ${product.displayRating($conn, $gadgetID)
-                           // }</div >
-                                </section >
-                            </div >
-                        </a >
+                                    <!-- Display gadget rating with half stars -->
+                                    ${product.displayRating}
+                                </section>
+                            </div>
+                        </a>
                     `;
                      });
                   }
@@ -297,6 +294,7 @@ $stmt = $conn->query($sql);
                });
          });
       });
+
 
    </script>
 
