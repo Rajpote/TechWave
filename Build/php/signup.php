@@ -5,11 +5,6 @@ session_start();
 // Include the file containing the database connection code
 include 'dbconn.php';
 
-// Redirect the user to the userpage if already logged in
-if (isset($_SESSION['username'])) {
-   header('location: home.php');
-}
-
 // Handle form submission
 if (isset($_POST['register-submit'])) {
    // Retrieve form data

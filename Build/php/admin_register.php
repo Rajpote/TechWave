@@ -5,24 +5,19 @@ session_start();
 // Include the file containing the database connection code
 include 'dbconn.php';
 
-// Redirect the user to the userpage if already logged in
-if (isset($_SESSION['username'])) {
-    header('location: admin.php');
-}
-
 // Handle form submission
-if (isset($_POST['register-submit'])) {
+if (isset($_POST['register-admin'])) {
     // Retrieve form data
-    $uname = $_POST['uname'];
-    $phnumber = $_POST['phnumber'];
+    $name = $_POST['name'];
     $email = $_POST['email'];
+    $phnumber = $_POST['phnumber'];
     $password = $_POST['password'];
 
     // Hash the password for security
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check if the user already exists
-    $sql = "SELECT * FROM admin_ragister WHERE phnumber = ? OR email = ?";
+    $sql = "SELECT * FROM admin_register WHERE phnumber = ? OR email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$phnumber, $email]);
     $result = $stmt->fetch();
@@ -30,19 +25,10 @@ if (isset($_POST['register-submit'])) {
     // If the user doesn't exist, register the user
     if (!$result) {
         // Insert user data into admin_ragister table
-        $sql = "INSERT INTO admin_ragister (uname, phnumber, email, password) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO admin_register (name, phnumber, email, password) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
+        $stmt->execute([$name, $phnumber, $email, $hashed_password]); // Pass values to execute
 
-        if ($stmt->execute([$uname, $phnumber, $email, $hashed_password])) {
-            // Insert user data into profile_data table
-            $sql = "INSERT INTO profile_info (uname, phnumber, email) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-
-            if ($stmt->execute([$uname, $phnumber, $email])) {
-                // Registration successful
-                $success = 1;
-            }
-        }
     }
 }
 
@@ -70,7 +56,7 @@ if (isset($_POST['register-submit'])) {
                     id="myForm">
                     <div class="flex flex-col px-5 py-3">
                         <label for="uname" class="text-slate-700 font-semibold font-serif pt-2">User Name:</label>
-                        <input type="text" name="uname" id="uname" placeholder="Enter your username"
+                        <input type="text" name="name" id="uname" placeholder="Enter your username"
                             class="input-field" />
                         <div id="unameError" class="text-red-500"></div>
 
@@ -94,9 +80,10 @@ if (isset($_POST['register-submit'])) {
                         <div id="passwordError" class="text-red-500"></div>
                     </div>
                     <div class="mb-4">
-                        <p>Already Have Account <a href="login.php" class="text-blue-700 hover:text-black">Login</a></p>
+                        <p>Already Have Account <a href="admin_login.php"
+                                class="text-blue-700 hover:text-black">Login</a></p>
                     </div>
-                    <button type="submit" name="register-submit"
+                    <button type="submit" name="register-admin"
                         class="p-3 bg-slate-400 hover:bg-slate-600 rounded-md text-white font-semibold transition duration-300 ease-in-out">Sign
                         In</button>
                 </form>

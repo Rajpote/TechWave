@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Include the file containing the database connection code
+include 'dbconn.php';
+
+if (!isset($_SESSION['aname'])) {
+    header('location: admin_login.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,8 +49,8 @@
                 </li>
                 <li>
                     <a href=" manage_review.php"
-                    class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">
-                    Review</a>
+                        class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">
+                        Review</a>
                 </li>
                 <li>
                     <a href=" manage_feedback.php"
@@ -49,7 +60,57 @@
             </ul>
         </nav>
     </header>
-    <main class=""></main>
+    <main class=" min-h-screen p-4 flex justify-end">
+
+        <div class="admin-content w-full max-w-screen-lg bg-white rounded-md shadow-md p-4 ">
+            <?php
+            $sql = "SELECT * FROM order_data";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            ?>
+
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="font-bold text-center border border-gray-300 py-2">S.N.</th>
+                        <th class="font-bold text-center border border-gray-300 py-2">User</th>
+                        <th class="font-bold border border-gray-300 py-2">Product</th>
+                        <th class="font-bold border border-gray-300 py-2">Price</th>
+                        <th class="font-bold border border-gray-300 py-2">Quantity</th>
+                        <th class="font-bold border border-gray-300 py-2">Transaction ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $count = 1;
+
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $id = $row['id'];
+                        $gname = $row['gname'];
+                        $price = $row['price'];
+                        $quantity = $row['quantity'];
+                        $transaction_id = $row['transaction_id'];
+
+                        echo '<tr>';
+                        echo '<td class="text-center border border-gray-300 py-2">' . $count . '</td>';
+                        echo '<td class="border border-gray-300 py-2">' . $id . '</td>';
+                        echo '<td class="border border-gray-300 py-2">' . $gname . '</td>';
+                        echo '<td class="border border-gray-300 py-2">NRs. ' . $price . '</td>';
+                        echo '<td class="border border-gray-300 py-2">' . $quantity . '</td>';
+                        echo '<td class="border border-gray-300 py-2">' . $transaction_id . '</td>';
+                        echo '</tr>';
+
+                        $count++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+
+
 </body>
 
 </html>

@@ -4,8 +4,6 @@ $cartTotal = $_POST['amount'];
 
 $paisa = (int) $cartTotal * 100;
 
-echo $paisa;
-
 $curl = curl_init();
 curl_setopt_array(
     $curl,
@@ -19,20 +17,20 @@ curl_setopt_array(
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => '{
-            "return_url": "http://localhost/legoempire/php/user/paymentsuccess.php",
-            "website_url": "https://127.0.0.1/",
-            "amount": "' . $paisa . '",
-            "purchase_order_id": "Order01",
-                "purchase_order_name": "test",
+                "return_url": "http://localhost/TechWave/Build/php/paymentsuccess.php",
+                "website_url": "https://127.0.0.1/",
+                "amount": "' . $paisa . '",
+                "purchase_order_id": "Order01",
+                    "purchase_order_name": "test",
 
-            "customer_info": {
-                "name": "Test Bahadur",
-                "email": "test@khalti.com",
-                "phone": "9800000001"
+                "customer_info": {
+                    "name": "Test Bahadur",
+                    "email": "test@khalti.com",
+                    "phone": "9800000001"
+                }
             }
-        }
 
-        ',
+            ',
         CURLOPT_HTTPHEADER => array(
             'Authorization: key live_secret_key_68791341fdd94846a146f0457ff7b455',
             'Content-Type: application/json',

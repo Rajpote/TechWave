@@ -1,5 +1,19 @@
+<?php
+session_start();
+
+// Include the file containing the database connection code
+include 'dbconn.php';
+
+if (!isset($_SESSION['aname'])) {
+    header('location: admin_login.php');
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -31,6 +45,11 @@
                 <li>
                     <a href="manage_product.php"
                         class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">Product</a>
+                </li>
+                <li>
+                    <a href="product_info.php"
+                        class="block w-full text-white text-xl p-2 rounded-r-md hover:bg-slate-100 hover:text-black transition-all duration-300">Product
+                        info</a>
                 </li>
                 <li>
                     <a href="manage_user.php"

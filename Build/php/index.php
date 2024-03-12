@@ -21,7 +21,7 @@ require_once 'rating.php';
 
 <body>
    <header class="bg-white px-20 mb-10 py-3 flex items-center justify-between sticky top-0 z-10 shadow-md">
-      <a href="home.php" class="italic text-yellow-400 px-3 rounded-2xl">
+      <a href="index.php" class="italic text-yellow-400 px-3 rounded-2xl">
          <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
       </a>
       <nav>

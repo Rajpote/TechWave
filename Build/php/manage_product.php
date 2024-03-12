@@ -1,16 +1,16 @@
 <?php
-// session_start();
+session_start();
 include 'dbconn.php';
+
+
+if (!isset($_SESSION['aname'])) {
+    header('location: admin_login.php');
+}
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// if (!isset($_SESSION['adminname'])) {
-//     header('location: home.php');
-// }
-
 if (isset($_POST['submit'])) {
-    $g_id = $_POST['g_id'];
     $type = $_POST['type'];
     $category = $_POST['category'];
     $gname = $_POST['gname'];
@@ -22,23 +22,22 @@ if (isset($_POST['submit'])) {
     $gprice = $_POST['gprice'];
 
     // Check if the gadget already exists
-    $sql = "SELECT * FROM product WHERE g_id = ? AND gspecification = ?";
+    $sql = "SELECT * FROM product WHERE gname = ? AND gspecification = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$g_id, $gspecification]);
+    $stmt->execute([$gname, $gspecification]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
         echo '<script> alert("Gadget already exists."); </script>';
     } else {
         if (
-            empty($g_id) || empty($type) || empty($category) || empty($gname) || empty($gdis) || empty($gspecification) || empty($gimage) || empty($imageone) || empty($imagetwo) || empty($gprice)
+            empty($type) || empty($category) || empty($gname) || empty($gdis) || empty($gspecification) || empty($gimage) || empty($imageone) || empty($imagetwo) || empty($gprice)
         ) {
             echo '<script> alert("Please fill all the fields."); window.location.href = "manage_product.php"; </script>';
         } else {
-            $sql = "INSERT INTO product (g_id, type, category, gname,  gdis, gspecification, gimage, imageone, imagetwo, gprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO product (type, category, gname,  gdis, gspecification, gimage, imageone, imagetwo, gprice) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([
-                $g_id,
                 $type,
                 $category,
                 $gname,
@@ -64,20 +63,23 @@ $stmt->execute();
 $value = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $g_id = isset($value['g_id']) ? $value['g_id'] : '';
+$gname = isset($value['gname']) ? $value['gname'] : '';
 $category = isset($value['category']) ? $value['category'] : '';
 $gprice = isset($value['gprice']) ? $value['gprice'] : '';
 
 if (isset($_POST['update-submit'])) {
     $g_id = $_POST['g_id'];
+    $gname = $_POST['gname'];
     $category = $_POST['category'];
     $gprice = $_POST['gprice'];
 
-    if (empty($_POST['g_id']) || empty($_POST['category']) || empty($_POST['gprice'])) {
+    if (empty($_POST['g_id'] || $_POST['gname']) || empty($_POST['category']) || empty($_POST['gprice'])) {
         echo '<script> alert("Please fill all the fields."); window.location.href = "manage_product.php"; </script>';
     } else {
-        $sql = "UPDATE product SET g_id=:g_id, category=:category, gprice=:gprice WHERE g_id=:g_id";
+        $sql = "UPDATE product SET g_id=:g_id, gname=:gname, category=:category, gprice=:gprice WHERE g_id=:g_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":g_id", $g_id);
+        $stmt->bindParam(":gname", $gname);
         $stmt->bindParam(":category", $category);
         $stmt->bindParam(":gprice", $gprice);
         $stmt->execute();
@@ -145,8 +147,6 @@ if (isset($_POST['update-submit'])) {
                     <div class="input-container">
                         <div class="add">
                             <h1 class="addtitle text-2xl font-bold mb-4">ADD GADGET</h1>
-                            <input type="number" class="id border border-gray-300 rounded px-3 py-2 mb-2 w-full"
-                                name="g_id" id="g_id" placeholder="Gadget ID" required>
                             <div class="select-container mb-2">
                                 <select name="type" id="type" class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="select">select</option>
@@ -229,6 +229,9 @@ if (isset($_POST['update-submit'])) {
                             </div>
                             <div class="box-content">
                                 <div class="con">
+                                    <input type="text"
+                                        class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full" name="gname"
+                                        id="gname" placeholder="Gadget name" value="<?php echo $gname ?>" required>
                                     <input type="number"
                                         class="price border border-gray-300 rounded px-3 py-2 mb-2 w-full" name="gprice"
                                         id="gprice" placeholder="Gadget Price" value="<?php echo $gprice ?>" required>

@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Include the file containing the database connection code
+include 'dbconn.php';
+
+if (!isset($_SESSION['aname'])) {
+    header('location: admin_login.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

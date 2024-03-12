@@ -62,9 +62,9 @@ if (!isset($_SESSION['aname'])) {
     </header>
     <main class="flex items-center justify-center mt-20">
         <div class="data">
-            <h1 class="text-2xl font-semibold capitalize">user details</h1>
+            <h1 class="text-2xl font-semibold capitalize">product details</h1>
             <?php
-            $query = "SELECT * FROM registration";
+            $query = "SELECT * FROM product";
             $stmt = $conn->query($query);
             $total = $stmt->rowCount();
             $count = 1;
@@ -74,9 +74,9 @@ if (!isset($_SESSION['aname'])) {
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="p-2 border border-gray-400">S.N.</th>
-                        <th class="p-2 border border-gray-400">User Name</th>
-                        <th class="p-2 border border-gray-400">Ph number</th>
-                        <th class="p-2 border border-gray-400">E-mail</th>
+                        <th class="p-2 border border-gray-400">Image</th>
+                        <th class="p-2 border border-gray-400">product Name</th>
+                        <th class="p-2 border border-gray-400">price</th>
                         <th class="p-2 border border-gray-400">Operations</th>
                     </tr>
                 </thead>
@@ -86,11 +86,11 @@ if (!isset($_SESSION['aname'])) {
                         echo "
             <tr>
                 <td class='p-2 border border-gray-400 text-center'>" . $count++ . "</td>
-                <td class='p-2 border border-gray-400'>" . $result["uname"] . "</td>
-                <td class='p-2 border border-gray-400'>" . $result["phnumber"] . "</td>
-                <td class='p-2 border border-gray-400'>" . $result["email"] . "</td>
+                <td class='p-2 border border-gray-400'>" . "<img class='w-full h-auto md:h-48 lg:h-64 xl:h-80 2xl:h-96 rounded-xl' src='../img/{$result['gimage']}' alt='Gadget Image'>" . "</td>
+                <td class='p-2 border border-gray-400'>" . $result["gname"] . "</td>
+                <td class='p-2 border border-gray-400'>" . $result["gprice"] . "</td>
                 <td class='p-2 border border-gray-400'>
-                    <a href='delete/delete.php?id=" . $result['id'] . "'>
+                    <a href='delete/delete_product.php?g_id=" . $result['g_id'] . "'>
                         <button class='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded'>
                             Delete
                         </button>

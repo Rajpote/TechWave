@@ -71,22 +71,25 @@ if (isset($_POST['update-cart'])) {
 </head>
 
 <body>
-    <header class="bg-white-400 px-20 mb-10 py-3 flex items-center justify-between sticky top-0 z-10 bg-slate-200">
-        <div class="italic text-yellow-400 bg-black py-2 px-3 rounded-2xl">TechWave</div>
-        <nav class="">
+    <header class="bg-white px-20 py-3 flex items-center justify-between sticky top-0 z-10 shadow-md">
+        <a href="home.php" class="italic text-yellow-400 px-3 rounded-2xl">
+            <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+        </a>
+        <nav>
             <ul class="flex items-center text-black gap-5">
                 <li><a href="home.php" class="hover:text-yellow-500">Home</a></li>
                 <li><a href="product.php" class="hover:text-yellow-500">Product</a></li>
                 <li><a href="contact.php" class="hover:text-yellow-500">Contact</a></li>
             </ul>
         </nav>
-        <div>
-            <form action="search.php" method="post" class="flex items-center relative">
+        <!-- Search Form -->
+        <div class="relative">
+            <form action="search.php" method="post" class="flex items-center">
                 <input type="text" name="search"
-                    class=" search-bar px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                     placeholder="Search . . . " id="search" />
                 <button type="submit"
-                    class=" flex-shrink-0 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg transition duration-150 ease-in-out absolute top-0 right-0">
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg ml-2">
                     <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
@@ -96,30 +99,31 @@ if (isset($_POST['update-cart'])) {
                 <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
             </div>
             <div>
-                <button id="popup-button"><i
-                        class="text-center fa-solid fa-user rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black"></i></button>
-                <div id="overlay" class="hidden fixed top-10 left-0 w-full h-full bg-transparent z-10"></div>
+                <button id="popup-button"
+                    class="text-center rounded-full border-2 border-blue-500 h-auto w-8 hover:border-black focus:outline-none">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+                <div id="overlay" class="hidden fixed top-0 left-0 w-full h-full bg-transparent z-10"></div>
                 <div id="popup-container"
-                    class="hidden fixed top-16 right-0 translate-[-50%, -50%] bg-white p-4 shadow-2xl z-10 h-auto w-auto">
+                    class="hidden fixed top-20 right--2 transform -translate-x-1/2 bg-white p-4 shadow-lg z-50 rounded-lg">
                     <div class="relative">
                         <button id="close-popup"
-                            class="text-3xl hover:text-red-600 absolute top-[-28px] right-0">&times;</button>
-                        <div id="username" class="container mt-6">
+                            class="text-3xl hover:text-red-600 absolute top-[-2rem] right-0">&times;</button>
+                        <div id="username" class="mt-6">
                             <?php echo $_SESSION['uname'] ?>
-
-                            <div class="update-user">
-                                <a href="update_user.php?id=<?php echo $uid; ?>">update</a>
+                            <div class="update-user mt-4">
+                                <a href="update_user.php?id=<?php echo $uid; ?>"
+                                    class="text-blue-500 hover:underline">Update</a>
                             </div>
-                            <div class="logout">
-                                <a href="logout.php">logout</a>
+                            <div class="logout mt-2">
+                                <a href="logout.php" class="text-red-500 hover:underline">Logout</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
+
             </div>
         </div>
-        <button class="hidden sm:text-slate-900"></button>
     </header>
     <main class="mx-20">
         <div class="mt-3">
@@ -180,7 +184,7 @@ if (isset($_POST['update-cart'])) {
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . '$' . $price . '</td>';
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><input type="number" class="form-control text-center p-0" name="quantity[' . $g_id . ']" value="' . $quantity . '"></td>';
                                         echo '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">' . '$' . $subTotal . '</td>';
-                                        echo '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"><i class="fa-solid fa-trash text-gray-400 cursor-pointer" id="showDeleteConfirmation" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" data-lego-id="' . $g_id . '" onclick="setg_idToDelete(this.getAttribute(\'data-lego-id\'))"></i></td>';
+                                        echo '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"><i class="fa-solid fa-trash text-red-400 cursor-pointer" id="showDeleteConfirmation" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" data-lego-id="' . $g_id . '" onclick="setg_idToDelete(this.getAttribute(\'data-lego-id\'))"></i></td>';
                                         echo '</tr>';
 
                                         $count++;
@@ -237,30 +241,11 @@ if (isset($_POST['update-cart'])) {
                 </table>
 
                 <div class="mt-5">
-                    <?php
-                    if ($itemCount > 0) {
-                        $sql = "SELECT * FROM profile_info WHERE id = :userId";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(':userId', $id);
-                        $stmt->execute();
-                        $profileInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                        if (!empty($profileInfo['landmark']) && !empty($profileInfo['address']) && !empty($profileInfo['area']) && !empty($profileInfo['city']) && !empty($profileInfo['province'])) {
-
-                            echo '
-                                    <form action="payment.php" method="POST">
-                                        <input type="number" name="amount" id="amount" value="' . $cartTotal . '" hidden>
-                                        <input type="text" name="username" id="username" value="' . $username . '" hidden>
-                                        <input type="submit" class="btn cart-btn px-5 py-2 fw-bold w-100" value="Checkout">
-                                    </form>';
-                        } else {
-                            echo '<button class="btn cart-btn py-2 fw-bold w-100" disabled>Checkout</button>';
-                            echo '<p class="text-danger mt-2 fw-bold">Billing address not set. Please update your profile.</p>';
-                        }
-                    } else {
-                        echo '<h6 class="fw-bold">No items in the cart to proceed.</h6>';
-                    }
-                    ?>
+                    <form action="payment.php" method="POST">
+                        <input type="number" name="amount" id="amount" value="<?php echo $cartTotal ?>" hidden>
+                        <input type="text" name="username" id="username" value="<?php echo $username ?>" hidden>
+                        <input type="submit" class="btn cart-btn px-5 py-2 fw-bold w-100" value="Checkout">
+                    </form>
                 </div>
                 <div>
                 </div>

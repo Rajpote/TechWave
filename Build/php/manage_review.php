@@ -1,5 +1,12 @@
 <?php
+session_start();
+
+// Include the file containing the database connection code
 include 'dbconn.php';
+
+if (!isset($_SESSION['aname'])) {
+    header('location: admin_login.php');
+}
 
 // Check if the form is submitted for updating feedback status
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['feedback_id']) && isset($_POST['status'])) {
@@ -77,13 +84,13 @@ $count = 1;
             </ul>
         </nav>
     </header>
-    <main class="bg-gray-100 min-h-screen py-8 px-4 ml-auto w-4/5">
+    <main class=" min-h-screen py-8 px-4 ml-auto w-4/5">
         <div class="max-w-5xl mx-auto">
             <div class="data">
                 <h1 class="text-3xl font-bold mb-4">User Feedback</h1>
                 <?php if ($total > 0): ?>
                     <table class="w-full border-collapse border border-gray-200">
-                        <thead>
+                        <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2">S.N.</th>
                                 <th class="px-4 py-2">User Name</th>

@@ -5,12 +5,6 @@ session_start();
 // Include the file containing the database connection code
 include 'dbconn.php';
 
-// Redirect the user to the home page if already logged in
-if (isset($_SESSION['uname'])) {
-   header('location: home.php');
-   exit(); // Stop further execution
-}
-
 // Check if login form is submitted
 if (isset($_POST['login_submit'])) {
    $email = $_POST['email'];
