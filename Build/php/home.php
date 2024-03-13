@@ -2,6 +2,7 @@
 session_start();
 include 'dbconn.php';
 require_once 'rating.php';
+require_once 'user.php';
 if (!isset($_SESSION['uname'])) {
    header('location: home.php');
    exit(); // Ensure that the script stops here if the user is not logged in.
@@ -12,11 +13,6 @@ $i = 0;
 $searchValue;
 $count = isset($_GET['count']) ? (int) $_GET['count'] : 0; // Ensure that $count is an integer.
 $uname = $_SESSION['uname'];
-
-$stmt = $conn->prepare("SELECT id FROM registration WHERE uname = :uname");
-$stmt->bindParam(':uname', $uname);
-$stmt->execute();
-$uid = $stmt->fetch(PDO::FETCH_COLUMN);
 
 
 $value = array(); // Initialize the $value array.
@@ -132,8 +128,8 @@ do {
                      <div id="username" class="mt-6">
                         <?php echo $_SESSION['uname'] ?>
                         <div class="update-user mt-4">
-                           <a href="update_user.php?id=<?php echo $uid; ?>"
-                              class="text-blue-500 hover:underline">Update</a>
+                           <a href="update_user.php?id=<?php echo $uid; ?>" class="text-blue-500 hover:underline">Update
+                              Details</a>
                         </div>
                         <div class="logout mt-2">
                            <a href="logout.php" class="text-red-500 hover:underline">Logout</a>

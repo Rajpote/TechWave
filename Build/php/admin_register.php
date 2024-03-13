@@ -52,6 +52,9 @@ if (isset($_POST['register-admin'])) {
     <main>
         <section class="flex items-center justify-center min-h-screen bg-slate-500 bg-center bg-cover">
             <div class="backdrop-blur-2xl rounded-xl p-5">
+                <a href="index.php" class="p-4 rounded-2xl flex items-center justify-center">
+                    <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+                </a>
                 <form action="" method="post" class="flex flex-col items-center justify-center py-5 rounded-md"
                     id="myForm">
                     <div class="flex flex-col px-5 py-3">

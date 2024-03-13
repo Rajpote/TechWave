@@ -75,7 +75,7 @@ $stmt->execute();
     <div class="container payment-container">
         <div class="row text-center">
             <div class="col-md-12">
-                <div>
+                <div class="bg-slate-400 rounded-xl">
                     <img src="../../images/success.png" class="mt-5" alt="">
                     <h3 class="fw-bold mt-5">Payment Success</h3>
                     <h6 class="mt-3 mb-5">Thank you for purchasing via Khalti Payment Gateway! Your payment has been

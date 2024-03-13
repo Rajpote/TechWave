@@ -29,7 +29,9 @@ if (!isset($_SESSION['aname'])) {
 
 <body>
     <header class="w-1/6 h-full bg-slate-600 fixed top-0 left-0 z-10">
-        <div class="italic text-yellow-400 bg-black py-2 mx-10 px-3 rounded-2xl ml-10">TechWave</div>
+        <a href="admin.php" class="italic text-yellow-400 px-3 rounded-2xl flex items-center justify-center">
+            <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+        </a>
         <nav class="my-10">
             <ul class="">
                 <li>

@@ -2,6 +2,8 @@
 session_start();
 include 'dbconn.php';
 require_once 'rating.php';
+
+require_once 'user.php';
 if (!isset($_SESSION['uname'])) {
     header('location: home.php');
     exit(); // Ensure that the script stops here if the user is not logged in.
@@ -66,8 +68,11 @@ if (!isset($_SESSION['uname'])) {
                         <div id="username" class="mt-6">
                             <?php echo $_SESSION['uname'] ?>
                             <div class="update-user mt-4">
-                                <a href="update_user.php?id=<?php echo $uid; ?>"
-                                    class="text-blue-500 hover:underline">Update</a>
+                                <div class="update-user mt-4">
+                                    <!-- Use $id instead of $uid -->
+                                    <a href="update_user.php?id=<?php echo $uid; ?>"
+                                        class="text-blue-500 hover:underline">Update Details</a>
+                                </div>
                             </div>
                             <div class="logout mt-2">
                                 <a href="logout.php" class="text-red-500 hover:underline">Logout</a>

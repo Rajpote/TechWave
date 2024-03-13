@@ -52,6 +52,9 @@ if (isset($_POST['login_submit'])) {
         <section class="flex items-center justify-center min-h-[100vh] p-5 bg-slate-400 bg-cover bg-center bg-no-repeat"
             style="background-image: url(../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg)">
             <div>
+                <a href="index.php" class="p-4 rounded-2xl flex items-center justify-center">
+                    <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+                </a>
                 <div class="p-10 backdrop-blur-xl rounded-xl">
                     <form action="" method="post" class="flex flex-col space-y-4">
                         <div>

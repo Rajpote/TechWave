@@ -1,7 +1,9 @@
 <?php
 session_start();
+
 include 'dbconn.php';
 
+require_once 'user.php';
 $cartTotal = 0;
 $total = 0;
 $charge = 5;
@@ -115,7 +117,8 @@ if (isset($_POST['update-cart'])) {
                             <?php echo $_SESSION['uname'] ?>
                             <div class="update-user mt-4">
                                 <a href="update_user.php?id=<?php echo $uid; ?>"
-                                    class="text-blue-500 hover:underline">Update</a>
+                                    class="text-blue-500 hover:underline">Update
+                                    Details</a>
                             </div>
                             <div class="logout mt-2">
                                 <a href="logout.php" class="text-red-500 hover:underline">Logout</a>

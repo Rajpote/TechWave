@@ -62,6 +62,9 @@ if (isset($_POST['register-submit'])) {
       <section class="flex items-center justify-center min-h-[100vh] bg-slate-500 bg-center bg-cover "
          style="background-image: url(../img/vojtech-bruzek-J82GxqnwKSs-unsplash.jpg);">
          <div class="backdrop-blur-2xl rounded-xl p-3">
+            <a href="index.php" class="p-4 rounded-2xl flex items-center justify-center">
+               <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-16">
+            </a>
             <form action="" method="post" class="flex items-center justify-center flex-col py-2 rounded-md" id="myForm">
                <div class="flex flex-col px-5 py-3">
                   <label for="uname" class="text-slate-700 font-semibold font-serif pt-2">User Name:</label>

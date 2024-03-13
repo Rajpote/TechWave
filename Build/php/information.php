@@ -4,6 +4,8 @@ include 'dbconn.php';
 // Function to calculate average rating
 require_once 'rating.php';
 
+require_once 'user.php';
+
 if (isset($_SESSION['id'])) {
    $id = $_SESSION['id'];
    $uname = $_SESSION['uname'];
@@ -209,8 +211,8 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div id="username" class="mt-6">
                            <?php echo $_SESSION['uname'] ?>
                            <div class="update-user mt-4">
-                              <a href="update_user.php?id=<?php echo $uid; ?>"
-                                 class="text-blue-500 hover:underline">Update</a>
+                              <a href="update_user.php?id=<?php echo $uid; ?>" class="text-blue-500 hover:underline">Update
+                                 Details</a>
                            </div>
                            <div class="logout mt-2">
                               <a href="logout.php" class="text-red-500 hover:underline">Logout</a>
@@ -224,14 +226,14 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
          </header>
          <main class="mx-10 mt-20">
             <article class="flex items-center justify-center px-10 gap-6 mt-[-10px]">
-               <section>
-                  <div>
-                     <div class="h-auto w-full rounded-xl">
-                        <?php
-                        echo "<img class='w-full h-auto md:h-48 lg:h-64 xl:h-80 2xl:h-96 rounded-xl' src='../img/{$row['gimage']}' alt='Gadget Image'>";
-                        ?>
-                     </div>
+               <section class="h-auto w-1/3 rounded-xl">
+
+                  <div class="h-auto w-full rounded-xl">
+                     <?php
+                     echo "<img class='w-full h-auto md:h-48 lg:h-64 xl:h-80 2xl:h-96 rounded-xl' src='../img/{$row['gimage']}' alt='Gadget Image'>";
+                     ?>
                   </div>
+
                </section>
                <section class="pr-10">
                   <div>
