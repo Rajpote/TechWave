@@ -106,7 +106,7 @@ require_once 'rating.php';
             <div class="mx-20 my-5">
                <div class="flex items-center justify-center gap-9">
                   <?php
-                  $sql = "SELECT * FROM product WHERE category = 'deals' LIMIT 6";
+                  $sql = "SELECT * FROM product WHERE category = 'bestbuy' LIMIT 4";
                   $stmt = $conn->query($sql);
 
                   if ($stmt->rowCount() > 0) {

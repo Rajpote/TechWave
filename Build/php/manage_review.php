@@ -121,8 +121,13 @@ $count = 1;
                                     <td class="px-4 py-2">
                                         <?php echo $result['g_id']; ?>
                                     </td>
-                                    <td class="px-4 py-2"><a href='delete/review.php?id=<?php echo $result['feedback_id']; ?>'
-                                            class="text-blue-500 hover:text-blue-700">Delete</a></td>
+                                    <td class="px-4 py-2">
+                                        <a href="delete/review.php?id=<?php echo htmlspecialchars($result['feedback_id']); ?>"
+                                            onclick="return confirm('Are you sure you want to delete this feedback?')">Delete</a>
+
+
+                                    </td>
+
                                     <td class="px-4 py-2">
                                         <select class='form-select w-full max-w-xs' name='status'
                                             onchange='updateStatus(this, "<?php echo $result['feedback_id']; ?>")'>
