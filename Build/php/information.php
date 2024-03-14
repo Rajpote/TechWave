@@ -111,7 +111,7 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Document</title>
+   <title>Detail</title>
 
    <link rel="stylesheet" href="../css/output.css" />
    <link rel="stylesheet" href="../css/style.css" />
@@ -195,7 +195,7 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="flex items-center justify-center gap-6">
                <div>
-                  <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+                  <a href="cart.php" class="hover:text-blue-500 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
                </div>
                <div>
                   <button id="popup-button"

@@ -66,7 +66,7 @@ if (isset($_POST['update-cart'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -100,7 +100,7 @@ if (isset($_POST['update-cart'])) {
         </div>
         <div class="flex items-center justify-center gap-6">
             <div>
-                <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="cart.php" class="hover:text-blue-500 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
             </div>
             <div>
                 <button id="popup-button"

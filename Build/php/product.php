@@ -49,7 +49,7 @@ $stmt = $conn->query($sql);
 <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Document</title>
+   <title>Product</title>
    <link rel="stylesheet" href="../css/output.css" />
    <link rel="stylesheet" href="../css/style.css" />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -118,7 +118,7 @@ $stmt = $conn->query($sql);
       </div>
       <div class="flex items-center justify-center gap-6">
          <div>
-            <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="cart.php" class="hover:text-blue-500 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
          <div>
             <button id="popup-button"
@@ -148,9 +148,10 @@ $stmt = $conn->query($sql);
       </div>
    </header>
 
-   <div class="filter-container my-4">
-      <form action="" method="GET">
-         <select name="category" id="category">
+   <div class="filter-container my-4 flex items-center justify-center">
+      <form action="" method="GET" class="flex flex-wrap items-center gap-4">
+         <select name="category" id="category"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500">
             <option value="">All Categories</option>
             <?php foreach ($categories as $categoryOption): ?>
                <option value="<?php echo $categoryOption; ?>" <?php echo ($category == $categoryOption) ? 'selected' : ''; ?>>
@@ -158,7 +159,8 @@ $stmt = $conn->query($sql);
                </option>
             <?php endforeach; ?>
          </select>
-         <select name="type" id="type">
+         <select name="type" id="type"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500">
             <option value="">All Brands</option>
             <?php foreach ($types as $brandOption): ?>
                <option value="<?php echo $brandOption; ?>" <?php echo ($type == $brandOption) ? 'selected' : ''; ?>>
@@ -166,9 +168,12 @@ $stmt = $conn->query($sql);
                </option>
             <?php endforeach; ?>
          </select>
-         <button type="submit">Apply Filters</button>
+         <button type="submit"
+            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Apply
+            Filters</button>
       </form>
    </div>
+
 
    <main class="bg-slate-300 w-full">
       <article class="bg-slate-300 w-full px-16 flex items-start justify-center">

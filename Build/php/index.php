@@ -44,7 +44,7 @@ require_once 'rating.php';
       </div>
       <div class="flex items-center justify-center gap-6">
          <div>
-            <a href="cart.php" class="hover:text-slate-100 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="cart.php" class="hover:text-blue-500 py-1"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
          <div class="gap-2 inline-block">
             <a href="signup.php"
@@ -79,7 +79,7 @@ require_once 'rating.php';
                            <h3 class="text-5xl text-slate-400 font-bold">
                               <?php echo $row['gname']; ?>
                            </h3>
-                           <p class="text-lg w-2/5 font-serif mt-3">Rs
+                           <p class="text-lg w-2/5 font-serif mt-3">
                               <?php echo $row['gdis']; ?>
                            </p>
                         </div>
@@ -116,7 +116,8 @@ require_once 'rating.php';
                         <div
                            class="w-1/5 h-2/6 bg-slate-100 rounded-xl hover:bg-white hover:text-slate-100 shadow hover:shadow-xl">
                            <a href="information.php?g_id=<?php echo $row['g_id']; ?>">
-                              <img src="../img/<?php echo $row['gimage']; ?>" alt="Gadget Image" class="rounded-xl">
+                              <img src="../img/<?php echo $row['gimage']; ?>" alt="Gadget Image"
+                                 class="rounded-xl h-52 w-auto">
                               <div class="m-2">
                                  <div>
                                     <h3 class="text-slate-700 font-semibold">
@@ -181,14 +182,16 @@ require_once 'rating.php';
       </section>
       <hr />
    </main>
-   <footer class="bg-yellow-200 px-10 mt-10">
-      <div class="italic text-yellow-400 bg-black py-2 px-3 mx-10 rounded-2xl w-[6%]">TechWave</div>
-      <div class="flex justify-between text-slate-800 gap-4 px-14 py-4 mt-4">
+   <footer class="bg-yellow-200 px-20 mt-10">
+      <a href="index.php" class="italic text-yellow-400 px-4 rounded-2xl">
+         <img src="../techwave-logo-zip-file/png/logo-no-background.png" alt="" class="w-auto h-12">
+      </a>
+      <div class="flex justify-between text-slate-800 gap-4 px-10 py-4 ">
          <ul class="flex flex-col gap-2">
             <li>ph: 9800000000</li>
             <li><a href="mailto:rrajpote666@gmail.com"
                   class="text-slate-800 hover:text-blue-500">rrajpote666@gmail.com</a></li>
-            <li>sjfnnfn</li>
+
          </ul>
          <ul class="flex flex-col gap-2">
             <li><a href="#" class="text-slate-800 hover:text-blue-500">About Us</a></li>
@@ -201,10 +204,10 @@ require_once 'rating.php';
                      class="fab fa-facebook-square text-2xl"></i></a>
             </li>
             <li>
-               <a href="#" class="text-slate-800 hover:text-blue-500"><i class="fab fa-youtube text-2xl"></i></a>
+               <a href="#" class="text-slate-800 hover:text-red-500"><i class="fab fa-youtube text-2xl"></i></a>
             </li>
             <li>
-               <a href="#" class="text-slate-800 hover:text-blue-500"><i
+               <a href="#" class="text-slate-800 hover:text-purple-500"><i
                      class="fab fa-instagram-square text-2xl"></i></a>
             </li>
          </ul>
