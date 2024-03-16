@@ -148,7 +148,7 @@ if (isset($_POST['update-cart'])) {
                 <div class="">
                     <div class="p-4 bg-white rounded shadow-md">
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="w-auto divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col"
@@ -211,12 +211,14 @@ if (isset($_POST['update-cart'])) {
                                 <div class="row">
                                     <?php if ($itemCount > 0): ?>
                                         <div class="col-md-3">
-                                            <a href="home.php" class="nav-link btn cart-btn py-2 fw-bold" role="button"><i
-                                                    class="fa-solid fa-chevron-left fa-2xs me-1"></i>Continue
+                                            <a href="home.php"
+                                                class="nav-link text-slate-200 p-2 fw-bold bg-black rounded-md"
+                                                role="button"><i class="fa-solid fa-chevron-left fa-2xs me-1"></i>Continue
                                                 Shopping</a>
                                         </div>
                                         <div class="col text-end">
-                                            <button class="btn cart-btn px-5 py-2 fw-bold" name="update-cart">Update
+                                            <button class="bg-blue-600 px-5 py-2 fw-bold rounded-md"
+                                                name="update-cart">Update
                                                 Cart</button>
                                         </div>
                                     <?php endif; ?>
@@ -228,7 +230,7 @@ if (isset($_POST['update-cart'])) {
             </div>
         </div>
         <div class="col-md-3 border-start border-2">
-            <div class="order-summary">
+            <div class="order-summary p-3">
                 <table class="table text-start">
                     <tr>
                         <td class="fw-bold text-center" colspan="2">Order Summary</td>
@@ -253,11 +255,12 @@ if (isset($_POST['update-cart'])) {
                     </tr>
                 </table>
 
-                <div class="mt-5">
+                <div class="mt-5 ">
                     <form action="payment.php" method="POST">
                         <input type="number" name="amount" id="amount" value="<?php echo $cartTotal ?>" hidden>
                         <input type="text" name="username" id="username" value="<?php echo $username ?>" hidden>
-                        <input type="submit" class="btn cart-btn px-5 py-2 fw-bold w-100" value="Checkout">
+                        <input type="submit" class="btn cart-btn px-5 py-2 fw-bold w-100 bg-green-500 rounded-md"
+                            value="Checkout">
                     </form>
                 </div>
                 <div>

@@ -71,7 +71,7 @@ do {
          echo "<img class='g-img w-1/4 h-auto' src='../img/{$item[0]['gimage']}' alt='Gadget Image'>";
          echo '<div class="gadget-section bg-white p-4">';
          echo '<div class="gadget-name text-xl font-semibold">' . $item[0]['gname'] . '</div>';
-         echo '<div class="gadget-price text-lg text-gray-800">Rs:' . $item[0]['gprice'] . '</div>';
+         echo '<div class="gadget-price text-lg text-gray-800">$' . $item[0]['gprice'] . '</div>';
          echo '<div class="gadget-rating mt-2">';
          echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>'; // Use $gadgetID here
          echo '</div>';
@@ -207,7 +207,7 @@ do {
                                        <h3 class="text-slate-700 font-semibold">
                                           <?php echo $row['gname']; ?>
                                        </h3>
-                                       <p class="text-purple-500"><span>Rs
+                                       <p class="text-purple-500"><span>$
                                              <?php echo $row['gprice']; ?>
                                           </span></p>
                                     </div>
@@ -227,7 +227,7 @@ do {
                   </div>
 
                </div>
-               <button class="py-3 px-4 my-0 mx-auto block bg-slate-400 rounded-xl">See All</button>
+               <!-- <button class="py-3 px-4 my-0 mx-auto block bg-slate-400 rounded-xl">See All</button> -->
             </div>
             </div>
          </section>
@@ -250,7 +250,7 @@ do {
                            echo '</div>';
                            echo '<div class="text-slate-500 text-left p-1 m-2">';
                            echo '<p class="pro-name">' . $row['gname'] . '</p>';
-                           echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
+                           echo '<p class="pro-name">$ ' . $row['gprice'] . '</p>';
                            echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
                            echo '</div>';
                            echo '</a>';

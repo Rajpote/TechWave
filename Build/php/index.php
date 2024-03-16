@@ -123,7 +123,7 @@ require_once 'rating.php';
                                     <h3 class="text-slate-700 font-semibold">
                                        <?php echo $row['gname']; ?>
                                     </h3>
-                                    <p class="text-purple-500"><span>Rs:
+                                    <p class="text-purple-500"><span>$
                                           <?php echo $row['gprice']; ?>
                                        </span></p>
                                  </div>
@@ -143,7 +143,7 @@ require_once 'rating.php';
                </div>
 
             </div>
-            <button class="py-3 px-4 my-5 mx-auto block bg-slate-400 rounded-xl">See All</button>
+            <!-- <button class="py-3 px-4 my-5 mx-auto block bg-slate-400 rounded-xl">See All</button> -->
          </div>
          </div>
       </section>
@@ -166,7 +166,7 @@ require_once 'rating.php';
                         echo '</div>';
                         echo '<div class="text-slate-500 text-left p-1 m-2">';
                         echo '<p class="pro-name">' . $row['gname'] . '</p>';
-                        echo '<p class="pro-name">Rs:' . $row['gprice'] . '</p>';
+                        echo '<p class="pro-name">$' . $row['gprice'] . '</p>';
                         echo '<div class="pro-name">' . displayRating($conn, $gadgetID) . '</div>';
                         echo '</div>';
                         echo '</a>';

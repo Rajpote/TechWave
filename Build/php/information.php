@@ -263,7 +263,7 @@ $comparisonGadgets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                            </div>
                            <div class="text-3xl text-purple-400">
                               <?php
-                              echo "<p class='gprice'>RS: {$row['gprice']} </p>";
+                              echo "<p class='gprice'>$ {$row['gprice']} </p>";
                               ?>
                            </div>
                         </div>

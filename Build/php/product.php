@@ -200,7 +200,7 @@ $stmt = $conn->query($sql);
                         }
 
                         if (isset($row['gprice']) && !empty($row['gprice'])) {
-                           echo '<div class="text-purple-500">Rs:' . $row['gprice'] . '</div>';
+                           echo '<div class="text-purple-500">$' . $row['gprice'] . '</div>';
                         }
                         ?>
                         <!-- Display gadget rating with half stars -->
@@ -285,7 +285,7 @@ $stmt = $conn->query($sql);
                                 <img class="h-60 w-full object-fill" src="../img/${product.gimage}" alt="Gadget Image">
                                 <section class="gadget-section mt-2 text-center">
                                     <div class="text-slate-700 font-semibold">${product.gname}</div>
-                                    <div class="text-purple-500">Rs: ${product.gprice}</div>
+                                    <div class="text-purple-500">$ ${product.gprice}</div>
                                     <!-- Display gadget rating with half stars -->
                                     ${product.displayRating}
                                 </section>
