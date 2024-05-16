@@ -1,6 +1,13 @@
 # TechWave E-Commerce Website
 
+![TechWave Landing Page](https://github.com/Rajpote/TechWave/assets/89523386/a882585f-55a2-4983-afbf-6401caff0b93)
+
+![Product](https://github.com/Rajpote/TechWave/assets/89523386/ba0e9f42-a9e8-49f4-9d17-0f659ac5add0)
+
 ## Overview
+
+
+
 TechWave is an e-commerce platform designed to provide users with a seamless shopping experience. It is built using HTML, Tailwind CSS, JavaScript for the frontend, PHP for the backend, and MySQL for the database. The platform integrates Khalti for secure payment transactions.
 
 ## Features
@@ -24,10 +31,10 @@ TechWave is an e-commerce platform designed to provide users with a seamless sho
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/techwave.git
+   git clone https://github.com/Rajpote/TechWave.git
    ```
 
-2. Import the SQL file `database.sql` into your MySQL database.
+2. Import the SQL file `techwave.sql` into your MySQL database.
 
 3. Configure the database connection in `config.php`.
 
